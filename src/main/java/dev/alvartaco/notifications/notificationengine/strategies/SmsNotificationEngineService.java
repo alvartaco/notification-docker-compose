@@ -13,6 +13,6 @@ public class SmsNotificationEngineService implements INotificationEngineService 
 
     @Override
     public void sendNotification() {
-        log.info("#NOTIFICATIONS - NOTIFICATION - Sent by SMS");
+        log.info("#NOTIFICATIONS-D-C - NOTIFICATION - Sent by SMS");
     }
 }

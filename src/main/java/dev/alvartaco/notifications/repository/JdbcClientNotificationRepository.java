@@ -56,12 +56,12 @@ public class JdbcClientNotificationRepository implements INotificationRepository
 
             Assert.state(updated == 1, "Failed to create Notification, table is empty");
 
-            log.info("#NOTIFICATIONS - END save Notification.");
+            log.info("#NOTIFICATIONS-D-C - END save Notification.");
 
             return (Integer) keyHolder.getKey();
 
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - create(Notification notification) ");
+            log.error("#NOTIFICATIONS-D-C - create(Notification notification) ");
             throw new NotificationException(e.toString());
         }
     }
@@ -72,7 +72,7 @@ public class JdbcClientNotificationRepository implements INotificationRepository
         try {
             return jdbcClient.sql("select notification_id from notification").query().listOfRows().size();
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - count() ");
+            log.error("#NOTIFICATIONS-D-C - count() ");
             throw new NotificationException(e.toString());
         }
     }*/
@@ -84,7 +84,7 @@ public class JdbcClientNotificationRepository implements INotificationRepository
                     .query(NotificationDTO.class)
                     .list();
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - List<Notification> findAllNotificationDTOsLiFo() ");
+            log.error("#NOTIFICATIONS-D-C - List<Notification> findAllNotificationDTOsLiFo() ");
             throw new NotificationException(e.toString());
         }
     }

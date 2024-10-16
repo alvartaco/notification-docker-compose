@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dev.alvartaco</groupId>
-	<artifactId>notification</artifactId>
+	<artifactId>notification-docker-compose</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>notification</name>
-	<description>Notifications Test</description>
+	<name>notification-docker-compose</name>
+	<description>Notifications Test Docker Compose</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -27,7 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>21</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -122,8 +122,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>22</source>
-					<target>22</target>
+					<source>21</source>
+					<target>21</target>
 					<compilerArgs>--enable-preview</compilerArgs>
 				</configuration>
 			</plugin>

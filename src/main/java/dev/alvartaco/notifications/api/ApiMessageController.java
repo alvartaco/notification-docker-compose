@@ -38,7 +38,7 @@ public class ApiMessageController {
         try {
             messageService.notify(messageDTO.getCategoryId(), messageDTO.getMessageBody());
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - Error /api/messages {}", e.getMessage());
+            log.error("#NOTIFICATIONS-D-C - Error /api/messages {}", e.getMessage());
         }
 
     }

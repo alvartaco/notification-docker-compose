@@ -1,7 +1,8 @@
 package dev.alvartaco.notifications.api;
 
 import dev.alvartaco.notifications.model.User;
-import dev.alvartaco.notifications.repository.UserRepository;
+import dev.alvartaco.notifications.repository.InMemoryUserRepository;
+import dev.alvartaco.notifications.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +18,15 @@ public class ApiUserController {
 
     private static final Logger log = LoggerFactory.getLogger(ApiUserController.class);
 
-    private final UserRepository usersRepository;
-    public ApiUserController(UserRepository usersRepository) {
-        this.usersRepository = usersRepository;
+    private final UserService userService;
+    public ApiUserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/api/users")
     List<User> findAll() {
-        log.info("#NOTIFICATIONS - INSIDE /users");
-        return usersRepository.findAll();
+        log.info("#NOTIFICATIONS-D-C - INSIDE /users");
+        return userService.findAll();
     }
 
 }

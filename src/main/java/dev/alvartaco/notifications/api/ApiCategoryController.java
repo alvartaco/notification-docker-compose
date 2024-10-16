@@ -26,13 +26,13 @@ public class ApiCategoryController {
 
     @GetMapping("/api/categories")
     List<CategoryDTO> getAllByCategoryNameAsc() throws CategoryException {
-        log.info("#NOTIFICATIONS - INSIDE /categories");
+        log.info("#NOTIFICATIONS-D-C - INSIDE /categories");
         return categoryService.getAllCategoryDTOsByCategoryNameAsc();
     }
 
     @GetMapping("/api/categories/{categoryId}")
     CategoryDTO getCategoryByCategoryId(@PathVariable short categoryId) throws CategoryException {
-        log.info("#NOTIFICATIONS - INSIDE /categories/{categoryId}");
+        log.info("#NOTIFICATIONS-D-C - INSIDE /categories/{categoryId}");
         return categoryService.getCategoryDTOByCategoryId((short) categoryId);
     }
 }

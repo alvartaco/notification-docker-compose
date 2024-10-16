@@ -32,7 +32,7 @@ public class JdbcClientMessageRepository implements IMessageRepository{
 //                    .query(Message.class)
 //                    .list();
 //        } catch (Exception e) {
-//            log.error("#NOTIFICATIONS - List<Message> findAll() ");
+//            log.error("#NOTIFICATIONS-D-C - List<Message> findAll() ");
 //            throw new MessageException(e.toString());
 //        }
 //    }
@@ -44,7 +44,7 @@ public class JdbcClientMessageRepository implements IMessageRepository{
 //                    .query(Message.class)
 //                    .optional();
 //        } catch (Exception e) {
-//            log.error("#NOTIFICATIONS - Optional<Message> findByMessageId() ");
+//            log.error("#NOTIFICATIONS-D-C - Optional<Message> findByMessageId() ");
 //            throw new MessageException(e.toString());
 //        }
 //    }
@@ -63,12 +63,12 @@ public class JdbcClientMessageRepository implements IMessageRepository{
                     .update(keyHolder);
             Assert.state(updated == 1, "Failed to create Message, table is empty");
 
-            log.info("#NOTIFICATIONS - END save message.");
+            log.info("#NOTIFICATIONS-D-C - END save message.");
 
             return (Integer) keyHolder.getKey();
 
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - create(Message message) ");
+            log.error("#NOTIFICATIONS-D-C - create(Message message) ");
             throw new MessageException(e.toString());
         }
     }
@@ -80,7 +80,7 @@ public class JdbcClientMessageRepository implements IMessageRepository{
         try {
             return jdbcClient.sql("select message_id from message").query().listOfRows().size();
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - count() ");
+            log.error("#NOTIFICATIONS-D-C - count() ");
             throw new MessageException(e.toString());
         }
     }
