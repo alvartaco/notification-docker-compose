@@ -1,9 +1,0 @@
-services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=notifications'
-      - 'POSTGRES_PASSWORD=password'
-      - 'POSTGRES_USER=cops'
-    ports:
-      - '5432:5432'

@@ -1,6 +1,6 @@
 package dev.alvartaco.notifications.controller;
 
-import dev.alvartaco.notifications.dto.NotificationDisplayDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDisplayDTO;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.service.NotificationService;
 import org.slf4j.Logger;

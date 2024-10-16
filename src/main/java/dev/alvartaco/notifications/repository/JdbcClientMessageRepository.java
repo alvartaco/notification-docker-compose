@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Repository JDBC Client for Messages
@@ -65,7 +66,7 @@ public class JdbcClientMessageRepository implements IMessageRepository{
 
             log.info("#NOTIFICATIONS-D-C - END save message.");
 
-            return (Integer) keyHolder.getKey();
+            return Objects.requireNonNull(keyHolder.getKey()).intValue();
 
         } catch (Exception e) {
             log.error("#NOTIFICATIONS-D-C - create(Message message) ");

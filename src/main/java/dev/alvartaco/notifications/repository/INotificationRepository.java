@@ -1,6 +1,6 @@
 package dev.alvartaco.notifications.repository;
 
-import dev.alvartaco.notifications.dto.NotificationDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDTO;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.model.Notification;
 

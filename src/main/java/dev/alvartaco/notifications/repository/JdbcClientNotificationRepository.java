@@ -1,6 +1,6 @@
 package dev.alvartaco.notifications.repository;
 
-import dev.alvartaco.notifications.dto.NotificationDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDTO;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.model.Notification;
 import org.slf4j.Logger;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Repository of DataBase Notification Records
@@ -58,7 +59,7 @@ public class JdbcClientNotificationRepository implements INotificationRepository
 
             log.info("#NOTIFICATIONS-D-C - END save Notification.");
 
-            return (Integer) keyHolder.getKey();
+            return Objects.requireNonNull(keyHolder.getKey()).intValue();
 
         } catch (Exception e) {
             log.error("#NOTIFICATIONS-D-C - create(Notification notification) ");

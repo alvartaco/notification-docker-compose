@@ -1,6 +1,6 @@
 package dev.alvartaco.notifications.api;
 
-import dev.alvartaco.notifications.dto.MessageDTO;
+import dev.alvartaco.notifications.model.dto.MessageDTO;
 import dev.alvartaco.notifications.service.CategoryService;
 import dev.alvartaco.notifications.service.MessageService;
 import jakarta.validation.Valid;

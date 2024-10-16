@@ -1,6 +1,6 @@
 package dev.alvartaco.notifications.controller;
 
-import dev.alvartaco.notifications.dto.CategoryDTO;
+import dev.alvartaco.notifications.model.dto.CategoryDTO;
 import dev.alvartaco.notifications.exception.CategoryException;
 import dev.alvartaco.notifications.service.CategoryService;
 import dev.alvartaco.notifications.service.MessageService;

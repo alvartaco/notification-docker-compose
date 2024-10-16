@@ -1,7 +1,7 @@
 package dev.alvartaco.notifications.service;
 
-import dev.alvartaco.notifications.dto.NotificationDTO;
-import dev.alvartaco.notifications.dto.NotificationDisplayDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDisplayDTO;
 import dev.alvartaco.notifications.exception.CategoryException;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.model.ConstNotificationStatus;

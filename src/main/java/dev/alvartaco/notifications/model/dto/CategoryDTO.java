@@ -1,4 +1,4 @@
-package dev.alvartaco.notifications.dto;
+package dev.alvartaco.notifications.model.dto;
 
 /**
  * DTO Created because Categories are no Records

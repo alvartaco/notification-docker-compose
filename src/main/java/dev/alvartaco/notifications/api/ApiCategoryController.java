@@ -1,6 +1,6 @@
 package dev.alvartaco.notifications.api;
 
-import dev.alvartaco.notifications.dto.CategoryDTO;
+import dev.alvartaco.notifications.model.dto.CategoryDTO;
 import dev.alvartaco.notifications.exception.CategoryException;
 import dev.alvartaco.notifications.service.CategoryService;
 import org.slf4j.Logger;

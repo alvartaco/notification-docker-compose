@@ -1,4 +1,4 @@
-package dev.alvartaco.notifications.dto;
+package dev.alvartaco.notifications.model.dto;
 
 /**
  * DTO Created to be used in REST API
