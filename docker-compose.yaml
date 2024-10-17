@@ -1,20 +1,20 @@
 
 services:
 
-  app:
-    image: 'notification-docker-compose:latest'
-    build:
-      context: .
-    container_name: app
-    depends_on:
-      - mysql
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/notifications
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
-    ports:
-      - "6868:8080"
+#  app:
+#    image: 'alvartaco/notification-docker-compose:0.0.1'
+#    build:
+#      context: .
+#    container_name: notification-docker-compose-app
+#    depends_on:
+#      - mysql
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/notifications
+#      - SPRING_DATASOURCE_USERNAME=root
+#      - SPRING_DATASOURCE_PASSWORD=root
+#      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+#    ports:
+#      - "6868:8080"
 
   mysql:
     image: mysql:8.0.32
