@@ -2,6 +2,7 @@ package dev.alvartaco.notifications.model;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 

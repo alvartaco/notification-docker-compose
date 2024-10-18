@@ -1,6 +1,7 @@
 package dev.alvartaco.notifications.repository;
 
 import dev.alvartaco.notifications.exception.MessageException;
+import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.model.Message;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -72,6 +73,11 @@ public class JdbcClientMessageRepository implements IMessageRepository{
             log.error("#NOTIFICATIONS-D-C - create(Message message) ");
             throw new MessageException(e.toString());
         }
+    }
+
+    @Override
+    public Message save(String categoryId, String messageBody) throws NotificationException, MessageException {
+        return null;
     }
 
     /**

@@ -1,9 +1,9 @@
 package dev.alvartaco.notifications.controller;
 
+import dev.alvartaco.notifications.kafka.MessageProducer;
 import dev.alvartaco.notifications.model.dto.CategoryDTO;
 import dev.alvartaco.notifications.exception.CategoryException;
 import dev.alvartaco.notifications.service.CategoryService;
-import dev.alvartaco.notifications.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,12 +25,12 @@ public class  MessageController {
 
     private static final Logger log = LoggerFactory.getLogger(MessageController.class);
     private final CategoryService categoryService;
-    private final MessageService messageService;
+    private final MessageProducer messageProducer;
 
     public MessageController(CategoryService categoryService,
-                             MessageService messageService) {
+                             MessageProducer messageProducer) {
         this.categoryService = categoryService;
-        this.messageService = messageService;
+        this.messageProducer = messageProducer;
     }
 
     /**
@@ -91,7 +91,7 @@ public class  MessageController {
 
         log.info("#NOTIFICATIONS-D-C - Sending the Notification of message creation");
         try {
-            messageService.notify(categoryId, messageBody);
+            messageProducer.send(categoryId, messageBody);
         } catch (Exception e) {
             log.error("#NOTIFICATIONS-D-C - Error - messageService.notify(categoryId, messageBody); ");
             return message("Message ERROR NOT Saved..!", "", model);

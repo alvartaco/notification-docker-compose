@@ -1,6 +1,5 @@
 package dev.alvartaco.notifications.kafka;
 
-//import com.programmingwithmati.springdockercompose.model.Transaction;
 import dev.alvartaco.notifications.model.dto.MessageDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

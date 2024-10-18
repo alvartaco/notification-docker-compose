@@ -1,8 +1,7 @@
 package dev.alvartaco.notifications.api;
 
+import dev.alvartaco.notifications.kafka.MessageProducer;
 import dev.alvartaco.notifications.model.dto.MessageDTO;
-import dev.alvartaco.notifications.service.CategoryService;
-import dev.alvartaco.notifications.service.MessageService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,24 +19,22 @@ import org.springframework.web.server.ResponseStatusException;
 public class ApiMessageController {
 
     private static final Logger log = LoggerFactory.getLogger(ApiMessageController.class);
-    private final MessageService messageService;
+    private final MessageProducer messageProducer;
 
-    public ApiMessageController(CategoryService categoryService,
-                             MessageService messageService) {
-        this.messageService = messageService;
+    public ApiMessageController(MessageProducer messageProducer) {
+          this.messageProducer = messageProducer;
     }
 
     /**
      * It can be tested with:
-     * $ curl -X POST localhost:8088/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
-     * @param messageDTO
+     * $ curl -X POST localhost:8088/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the body"}'
+     * @param messageDTO MessageDTO
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    void create(@Valid @RequestBody MessageDTO messageDTO)  {
-
+    void send(@Valid @RequestBody MessageDTO messageDTO)  {
         try {
-            messageService.notify(messageDTO.getCategoryId(), messageDTO.getMessageBody());
+            messageProducer.send(messageDTO.getCategoryId(), messageDTO.getMessageBody());
         } catch (Exception e) {
             log.error("#NOTIFICATIONS-D-C - Error /api/messages {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
