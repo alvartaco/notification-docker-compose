@@ -67,7 +67,7 @@ For buildeng the application uses:
 
     -> JDK : 22
 
-    -> HTTP Port : 8088
+    -> HTTP Port : 8080
 
     -> MAVEN
    

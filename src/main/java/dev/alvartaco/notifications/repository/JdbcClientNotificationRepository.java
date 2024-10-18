@@ -1,6 +1,6 @@
 package dev.alvartaco.notifications.repository;
 
-import dev.alvartaco.notifications.dto.NotificationDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDTO;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.model.Notification;
 import org.slf4j.Logger;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Repository of DataBase Notification Records
@@ -56,12 +57,12 @@ public class JdbcClientNotificationRepository implements INotificationRepository
 
             Assert.state(updated == 1, "Failed to create Notification, table is empty");
 
-            log.info("#NOTIFICATIONS - END save Notification.");
+            log.info("#NOTIFICATIONS-D-C - END save Notification.");
 
-            return (Integer) keyHolder.getKey();
+            return Objects.requireNonNull(keyHolder.getKey()).intValue();
 
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - create(Notification notification) ");
+            log.error("#NOTIFICATIONS-D-C - create(Notification notification) ");
             throw new NotificationException(e.toString());
         }
     }
@@ -72,7 +73,7 @@ public class JdbcClientNotificationRepository implements INotificationRepository
         try {
             return jdbcClient.sql("select notification_id from notification").query().listOfRows().size();
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - count() ");
+            log.error("#NOTIFICATIONS-D-C - count() ");
             throw new NotificationException(e.toString());
         }
     }*/
@@ -84,7 +85,7 @@ public class JdbcClientNotificationRepository implements INotificationRepository
                     .query(NotificationDTO.class)
                     .list();
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - List<Notification> findAllNotificationDTOsLiFo() ");
+            log.error("#NOTIFICATIONS-D-C - List<Notification> findAllNotificationDTOsLiFo() ");
             throw new NotificationException(e.toString());
         }
     }

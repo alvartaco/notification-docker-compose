@@ -1,6 +1,6 @@
 package dev.alvartaco.notifications.controller;
 
-import dev.alvartaco.notifications.dto.NotificationDisplayDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDisplayDTO;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.service.NotificationService;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class NotificationController {
 
     @GetMapping(value = "", produces = MediaType.TEXT_HTML_VALUE)
     public String list(Model model) throws NotificationException {
-        log.info("#NOTIFICATIONS - public String list(Model model)");
+        log.info("#NOTIFICATIONS-D-C - public String list(Model model)");
         List<NotificationDisplayDTO> notificationDisplayDTOS = notificationService.getAllNotificationsDisplayDTOsLiFo();
         model.addAttribute("displayTable", (notificationDisplayDTOS.isEmpty() ? "none" : "block"));
         model.addAttribute("rows", notificationService.getAllNotificationsDisplayDTOsLiFo());

@@ -13,6 +13,6 @@ public class PushNotificationEngineService implements INotificationEngineService
 
     @Override
     public void sendNotification() {
-        log.info("#NOTIFICATIONS - NOTIFICATION - Sent by Push Notification");
+        log.info("#NOTIFICATIONS-D-C - NOTIFICATION - Sent by Push Notification");
     }
 }

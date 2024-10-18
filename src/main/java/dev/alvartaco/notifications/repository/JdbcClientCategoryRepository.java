@@ -34,7 +34,7 @@ public class JdbcClientCategoryRepository implements ICategoryRepository {
                     .query(Category.class)
                     .list();
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - List<Category> findAllByCategoryNameAsc() ");
+            log.error("#NOTIFICATIONS-D-C - List<Category> findAllByCategoryNameAsc() ");
             throw new CategoryException(e.toString());
         }
     }
@@ -52,7 +52,7 @@ public class JdbcClientCategoryRepository implements ICategoryRepository {
                     .query(Category.class)
                     .optional();
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - Optional<Category> findByCategoryId() ");
+            log.error("#NOTIFICATIONS-D-C - Optional<Category> findByCategoryId() ");
             throw new CategoryException(e.toString());
         }
     }

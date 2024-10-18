@@ -15,6 +15,6 @@ public class EmailNotificationEngineService implements INotificationEngineServic
 
     @Override
     public void sendNotification() {
-        log.info("#NOTIFICATIONS - NOTIFICATION - Sent by EMAIL");
+        log.info("#NOTIFICATIONS-D-C - NOTIFICATION - Sent by EMAIL");
     }
 }

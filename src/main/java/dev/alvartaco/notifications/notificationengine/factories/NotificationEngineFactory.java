@@ -43,7 +43,7 @@ public class NotificationEngineFactory {
     public INotificationEngineService getNotificationService(String notificationType) {
         INotificationEngineService iNotificationEngineService = iNotificationServiceMap.get(notificationType);
         if (iNotificationEngineService == null) {
-            log.error("#NOTIFICATIONS - Error getting notification services.");
+            log.error("#NOTIFICATIONS-D-C - Error getting notification services.");
             throw new RuntimeException("Unsupported notification type");
         }
         return iNotificationEngineService;

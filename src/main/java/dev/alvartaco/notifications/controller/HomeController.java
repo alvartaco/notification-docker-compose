@@ -15,7 +15,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        log.info("#NOTIFICATIONS - INSIDE /");
+        log.info("#NOTIFICATIONS-D-C - INSIDE /");
         return "index";
     }
 }

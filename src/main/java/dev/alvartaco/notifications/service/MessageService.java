@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 
 @Transactional
 @Service
-public class MessageService implements IMessageService{
+//public class MessageService implements IMessageService{
+public class MessageService implements IMessageService {
 
     private static final Logger log = LoggerFactory.getLogger(MessageService.class);
     private final IMessageRepository iMessageRepository;
@@ -34,13 +35,28 @@ public class MessageService implements IMessageService{
     /**
      * Main entry point to save messages
      */
-    public Integer create(@Valid Message message) throws MessageException {
-        log.info("#NOTIFICATIONS - Going to iMessageRepository.create(message).");
+    private Integer create(@Valid Message message) throws MessageException {
+        log.info("#NOTIFICATIONS-D-C - Going to iMessageRepository.create(message).");
         return iMessageRepository.create(message);
     }
 
     @Override
-    public void notify(String categoryId, String messageBody) throws NotificationException, MessageException {
+    public void notify(String categoryId, String messageBody) throws NotificationException {
+
+        try {
+
+            log.info("#NOTIFICATIONS-D-C - notify(String categoryId, String messageBody)");
+            notificationService.notify(
+                    save(categoryId, messageBody)
+            );
+
+        } catch (Exception e) {
+            log.error("#NOTIFICATIONS-D-C - Error notify(String categoryId, String messageBody)");
+            throw new NotificationException(e.toString());
+        }
+    }
+
+    private Message save(String categoryId, String messageBody) throws NotificationException, MessageException {
 
         /*
          * Validation for existing in Database categoryId
@@ -48,20 +64,20 @@ public class MessageService implements IMessageService{
          */
         try {
             if (categoryService.getAllCategoryDTOsByCategoryNameAsc().stream().noneMatch(dto -> dto.getCategoryId() == Short.parseShort(categoryId))) {
-                log.error("#NOTIFICATIONS - Error categoryId");
-                throw new MessageException("#NOTIFICATIONS - Error categoryId");
+                log.error("#NOTIFICATIONS-D-C - Error categoryId");
+                throw new MessageException("#NOTIFICATIONS-D-C - Error categoryId");
             }
             if (messageBody == null || messageBody.isEmpty() || messageBody.isBlank()) {
-                log.error("#NOTIFICATIONS - Error messageBody");
-                throw new MessageException("#NOTIFICATIONS - Error messageBody");
+                log.error("#NOTIFICATIONS-D-C - Error messageBody");
+                throw new MessageException("#NOTIFICATIONS-D-C - Error messageBody");
             }
         } catch (CategoryException e) {
-            log.error("#NOTIFICATIONS - Error notify(String categoryId, String messageBody)");
+            log.error("#NOTIFICATIONS-D-C - Error save(String categoryId, String messageBody)");
             throw new MessageException(e.toString());
         }
 
         try {
-            log.info("#NOTIFICATIONS - START to save message.");
+            log.info("#NOTIFICATIONS-D-C - START to save message.");
 
             Message message = new Message(
                     null,
@@ -69,7 +85,7 @@ public class MessageService implements IMessageService{
                     messageBody.trim(),
                     LocalDateTime.now());
 
-            log.info("#NOTIFICATIONS - Message {}",  message);
+            log.info("#NOTIFICATIONS-D-C - Message {}",  message);
 
             message = new Message(
                     create(message),
@@ -78,11 +94,10 @@ public class MessageService implements IMessageService{
                     message.createdOn()
             );
 
-            log.info("#NOTIFICATIONS - notify(Message message)");
-            notificationService.notify(message);
+            return message;
 
         } catch (Exception e) {
-            log.error("#NOTIFICATIONS - Error saving message.");
+            log.error("#NOTIFICATIONS-D-C - Error saving message.");
             throw new NotificationException(e.toString());
         }
     }

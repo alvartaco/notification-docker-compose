@@ -19,14 +19,15 @@ import java.util.List;
  * into memory
  */
 @Repository
-public class UserRepository {
+public class InMemoryUserRepository implements IUserRepository {
 
-    private static final Logger log = LoggerFactory.getLogger(UserRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
     private final CategoryService categoryService;
-    public UserRepository(CategoryService categoryService) {
+    public InMemoryUserRepository(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
     private final List<User> users = new ArrayList<>();
+    @Override
     public List<User> findAll() {
         return users;
     }
@@ -37,7 +38,7 @@ public class UserRepository {
     @PostConstruct
     private void init() {
         try {
-            log.info("#NOTIFICATIONS - START to save users.");
+            log.info("#NOTIFICATIONS-D-C - START to save users.");
             users.add(new User(
                     1,
                     "Alejandro Sporty, SMS",
@@ -79,10 +80,10 @@ public class UserRepository {
                             ConstChannelTypes.PUSH_NOTIFICATION
                     )
             ));
-            log.info("#NOTIFICATIONS - Users {}",  users);
-            log.info("#NOTIFICATIONS - END saving users.");
+            log.info("#NOTIFICATIONS-D-C - Users {}",  users);
+            log.info("#NOTIFICATIONS-D-C - END saving users.");
         } catch (CategoryException e) {
-            log.error("#NOTIFICATIONS - Error getting categories when creating users.");
+            log.error("#NOTIFICATIONS-D-C - Error getting categories when creating users.");
         }
     }
 }

@@ -1,7 +1,7 @@
 package dev.alvartaco.notifications.service;
 
-import dev.alvartaco.notifications.dto.NotificationDTO;
-import dev.alvartaco.notifications.dto.NotificationDisplayDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDTO;
+import dev.alvartaco.notifications.model.dto.NotificationDisplayDTO;
 import dev.alvartaco.notifications.exception.CategoryException;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.model.ConstNotificationStatus;
@@ -55,7 +55,7 @@ public class NotificationService {
         LocalDateTime now;
 
         List<User> users = userService.getUsersByCategoryId(message.category().getCategoryId());
-        log.info("#NOTIFICATIONS - Users {}",  users);
+        log.info("#NOTIFICATIONS-D-C - Users {}",  users);
 
         if (users != null) {
 
@@ -76,7 +76,7 @@ public class NotificationService {
 
                         now = LocalDateTime.now();
 
-                        log.info("#NOTIFICATIONS - CREATE NOTIFICATION");
+                        log.info("#NOTIFICATIONS-D-C - CREATE NOTIFICATION");
                         notification = new Notification(
                                 0,
                                 message,
@@ -87,16 +87,16 @@ public class NotificationService {
                                 now,
                                 Short.parseShort("0"));
 
-                        log.info("#NOTIFICATIONS - notification {}", notification);
+                        log.info("#NOTIFICATIONS-D-C - notification {}", notification);
 
                         notificationId = create(notification);
 
                         // If the notification was created in the DB
                         // The corresponding notification message is sent to the user
                         if (notificationId > 0) {
-                             log.info("#NOTIFICATIONS - Start sending corresponding dummy notification to the message " );
+                             log.info("#NOTIFICATIONS-D-C - Start sending corresponding dummy notification to the message " );
                                  notificationEngineFactory.execute(channelType);
-                             log.info("#NOTIFICATIONS - End Sending corresponding dummy notification to the message " );
+                             log.info("#NOTIFICATIONS-D-C - End Sending corresponding dummy notification to the message " );
                         }
                     }
                 }
@@ -123,17 +123,17 @@ public class NotificationService {
             for (NotificationDTO notificationDTO : iNotificationRepository.findAllNotificationDTOsLiFo()) {
                 notificationDisplayDTOS.add(mapDTOToDisplayDTO(notificationDTO));
             }
-            log.info("#NOTIFICATIONS - OK getAllNotificationsDisplayDTOsLiFo().");
+            log.info("#NOTIFICATIONS-D-C - OK getAllNotificationsDisplayDTOsLiFo().");
             return notificationDisplayDTOS;
         } catch ( Exception e) {
-            log.error("#NOTIFICATIONS - ERROR getAllNotificationsDisplayDTOsLiFo().");
+            log.error("#NOTIFICATIONS-D-C - ERROR getAllNotificationsDisplayDTOsLiFo().");
             throw new NotificationException("Notification not found");
         }
     }
 
     /**
      * Fill the DTO with data formated por the Front
-     * @param NotificationDTO
+     * @param
      * @return
      */
     public NotificationDisplayDTO mapDTOToDisplayDTO(NotificationDTO notificationDTO) throws CategoryException {
