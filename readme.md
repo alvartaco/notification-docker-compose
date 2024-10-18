@@ -65,9 +65,13 @@ For buildeng the application uses:
      
      :: Spring Boot ::                (v3.3.4)
 
-    -> JDK : 22
+    -> Docker Compose : KafKa - KAfKa Ui - MySql
+
+    -> JDK : 21
 
     -> HTTP Port : 8080
+
+    -> KafKa UI : 8081
 
     -> MAVEN
    
@@ -104,7 +108,7 @@ The Log and some json files, related to users and categories are also uploaded i
 
 In order to test creation of Messages, that fire the Notifications the User's that are Subscribed, using the REST API; this command can be executed:
 
-    curl -X POST localhost:8088/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
+    curl -X POST localhost:8080/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
 
 Latest Commit includes the Notifications Sent List:
 
