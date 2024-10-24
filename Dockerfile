@@ -1,7 +1,11 @@
-FROM openjdk:21
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} application.jar
-CMD apt-get update -y
-ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/application.jar"]
+ FROM openjdk:21
+ EXPOSE 6868
+ ADD target/notification-docker-compose-0.0.1-SNAPSHOT.jar notifications-app.jar
+ ENTRYPOINT ["java", "-jar", "notifications-app.jar"]
+
+### ARG JAR_FILE=target/*.jar
+### COPY ${JAR_FILE} notifications-docker-compose-app.jar
+### CMD apt-get update -y
+### ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/notifications-docker-compose-app.jar"]
 
 
