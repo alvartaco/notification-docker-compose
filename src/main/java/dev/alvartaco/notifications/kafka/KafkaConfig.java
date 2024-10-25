@@ -30,7 +30,7 @@ public class KafkaConfig {
   @Bean
   public Map<String, Object> consumerConfigs() {
     Map<String, Object> props = new HashMap<>();
-    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,broker:29092");
     props.put(ConsumerConfig.GROUP_ID_CONFIG, "message-group");
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
     return props;

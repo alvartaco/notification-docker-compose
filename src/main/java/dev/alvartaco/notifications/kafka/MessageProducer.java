@@ -26,7 +26,7 @@ public class MessageProducer {
 
     public void send(String categoryId, String messageBody) {
         try (KafkaProducer<String, String> messageProducer = new KafkaProducer<>(Map.of(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
+                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,broker:29092",
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class
         ))) {

@@ -1,20 +1,21 @@
 
 services:
 
-#  app:
-#    image: 'alvartaco/notification-docker-compose:0.0.1'
-#    build:
-#      context: .
-#    container_name: notification-docker-compose-app
-#    depends_on:
-#      - mysql
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/notifications
-#      - SPRING_DATASOURCE_USERNAME=root
-#      - SPRING_DATASOURCE_PASSWORD=root
-#      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
-#    ports:
-#      - "6868:8080"
+  app:
+    image: 'alvartaco/notification-docker-compose:0.0.1'
+    build:
+        context: .
+    container_name: notification-docker-compose-app
+    depends_on:
+      - mysql
+      - broker
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/notifications
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+    ports:
+      - "6868:8080"
 
   mysql:
     image: mysql:8.0.32
@@ -45,7 +46,7 @@ services:
       KAFKA_JMX_HOSTNAME: localhost
       KAFKA_PROCESS_ROLES: 'broker,controller'
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
-      KAFKA_LISTENERS: 'PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://0.0.0.0:9092'
+      KAFKA_LISTENERS: 'PLAINTEXT://broker:29092,CONTROLLER://broker:29093,PLAINTEXT_HOST://broker:9092'
       KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
       KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
@@ -57,7 +58,7 @@ services:
     container_name: kafbat-ui
     image: ghcr.io/kafbat/kafka-ui
     ports:
-      - 8081:8080
+      - "8081:8080"
     depends_on:
       - broker
     environment:

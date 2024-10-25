@@ -67,15 +67,21 @@ For buildeng the application uses:
 
     -> Docker Compose : KafKa - KAfKa Ui - MySql
 
+    -> Docker Compose Image : https://hub.docker.com/r/alvartaco/notification-docker-compose
+
+    -> *Needs to be added to hosts for building the app: 127.0.0.1       broker
+
     -> JDK : 21
 
-    -> HTTP Port : 8080
+    -> HTTP Port External App: 8080
+
+    -> HTTP Port Docker Internal App: 6868
 
     -> KafKa UI : 8081
 
     -> MAVEN
    
-    -> JDBC Client for DB Connection - H2
+    -> JDBC Client for DB Connection - MySQL at Docker Compose
 
     -> Thymeleaf Java engine  for processing and creating HTML, XML, JavaScript, CSS and text
 
@@ -108,7 +114,7 @@ The Log and some json files, related to users and categories are also uploaded i
 
 In order to test creation of Messages, that fire the Notifications the User's that are Subscribed, using the REST API; this command can be executed:
 
-    curl -X POST localhost:8080/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
+    curl -X POST localhost:nnnn/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
 
 Latest Commit includes the Notifications Sent List:
 
