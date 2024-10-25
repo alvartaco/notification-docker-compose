@@ -67,7 +67,7 @@ For buildeng the application uses:
 
     -> Docker Compose : KafKa - KAfKa Ui - MySql
 
-    -> Needs to be added to hosts : 127.0.0.1       broker
+    -> *Needs to be added to hosts for building the app: 127.0.0.1       broker
 
     -> JDK : 21
 
