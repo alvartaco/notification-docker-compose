@@ -1,5 +1,6 @@
 package dev.alvartaco.notifications.controller;
 
+import dev.alvartaco.notifications.kafka.KafkaHealthService;
 import dev.alvartaco.notifications.kafka.MessageProducer;
 import dev.alvartaco.notifications.model.dto.CategoryDTO;
 import dev.alvartaco.notifications.exception.CategoryException;
@@ -26,11 +27,13 @@ public class  MessageController {
     private static final Logger log = LoggerFactory.getLogger(MessageController.class);
     private final CategoryService categoryService;
     private final MessageProducer messageProducer;
+    private final KafkaHealthService kafkaHealthService;
 
     public MessageController(CategoryService categoryService,
-                             MessageProducer messageProducer) {
+                             MessageProducer messageProducer, KafkaHealthService kafkaHealthService) {
         this.categoryService = categoryService;
         this.messageProducer = messageProducer;
+        this.kafkaHealthService = kafkaHealthService;
     }
 
     /**
@@ -49,6 +52,8 @@ public class  MessageController {
             model.addAttribute(ERROR, error);
 
         List<CategoryDTO> categories;
+        boolean isKafkaUp = kafkaHealthService.isKafkaUp();
+
         try {
             categories = categoryService.getAllCategoryDTOsByCategoryNameAsc();
         } catch (CategoryException e) {
@@ -56,7 +61,9 @@ public class  MessageController {
             log.error("#NOTIFICATIONS-D-C - Error getting categories /message, fwd to index.");
             return "index";
         }
+
         model.addAttribute("categorySelect", categories);
+        model.addAttribute("isNotKafkaUp", !isKafkaUp);
         log.info("#NOTIFICATIONS-D-C - END /message");
         return "message/index";
     }
@@ -89,11 +96,16 @@ public class  MessageController {
             return "index";
         }
 
-        log.info("#NOTIFICATIONS-D-C - Sending the Notification of message creation");
-        try {
-            messageProducer.send(categoryId, messageBody);
-        } catch (Exception e) {
-            log.error("#NOTIFICATIONS-D-C - Error - messageService.notify(categoryId, messageBody); ");
+        if (kafkaHealthService.isKafkaUp()) {
+            log.info("#NOTIFICATIONS-D-C - Sending the Notification of message creation");
+            try {
+                messageProducer.send(categoryId, messageBody);
+            } catch (Exception e) {
+                log.error("#NOTIFICATIONS-D-C - Error - messageProducer.send(categoryId, messageBody); ");
+                return message("Message ERROR NOT Saved..!", "", model);
+            }
+        } else {
+            log.error("#NOTIFICATIONS-D-C - Error - messageProducer.send(categoryId, messageBody); No Kafka Service ");
             return message("Message ERROR NOT Saved..!", "", model);
         }
 

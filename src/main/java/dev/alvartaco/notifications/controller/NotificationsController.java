@@ -1,5 +1,6 @@
 package dev.alvartaco.notifications.controller;
 
+import dev.alvartaco.notifications.kafka.KafkaHealthService;
 import dev.alvartaco.notifications.model.dto.NotificationDisplayDTO;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.service.NotificationService;
@@ -18,22 +19,29 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/notifications")
-public class NotificationController {
+public class NotificationsController {
 
-    private static final Logger log = LoggerFactory.getLogger(NotificationController.class);
+    private static final Logger log = LoggerFactory.getLogger(NotificationsController.class);
+    private final KafkaHealthService kafkaHealthService;
 
     private final NotificationService notificationService;
-    public NotificationController(
-                                    NotificationService notificationService ) {
+    public NotificationsController(
+            KafkaHealthService kafkaHealthService, NotificationService notificationService ) {
+        this.kafkaHealthService = kafkaHealthService;
         this.notificationService = notificationService;
+
     }
 
     @GetMapping(value = "", produces = MediaType.TEXT_HTML_VALUE)
     public String list(Model model) throws NotificationException {
+
+        boolean isKafkaUp = kafkaHealthService.isKafkaUp();
+
         log.info("#NOTIFICATIONS-D-C - public String list(Model model)");
         List<NotificationDisplayDTO> notificationDisplayDTOS = notificationService.getAllNotificationsDisplayDTOsLiFo();
         model.addAttribute("displayTable", (notificationDisplayDTOS.isEmpty() ? "none" : "block"));
         model.addAttribute("rows", notificationService.getAllNotificationsDisplayDTOsLiFo());
+        model.addAttribute("isNotKafkaUp", !isKafkaUp);
         return "notifications/index";
     }
 

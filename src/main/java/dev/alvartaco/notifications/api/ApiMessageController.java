@@ -1,5 +1,6 @@
 package dev.alvartaco.notifications.api;
 
+import dev.alvartaco.notifications.kafka.KafkaHealthService;
 import dev.alvartaco.notifications.kafka.MessageProducer;
 import dev.alvartaco.notifications.model.dto.MessageDTO;
 import jakarta.validation.Valid;
@@ -20,9 +21,11 @@ public class ApiMessageController {
 
     private static final Logger log = LoggerFactory.getLogger(ApiMessageController.class);
     private final MessageProducer messageProducer;
+    private KafkaHealthService kafkaHealthService;
 
-    public ApiMessageController(MessageProducer messageProducer) {
-          this.messageProducer = messageProducer;
+    public ApiMessageController(MessageProducer messageProducer, KafkaHealthService kafkaHealthService) {
+        this.messageProducer = messageProducer;
+        this.kafkaHealthService = kafkaHealthService;
     }
 
     /**
@@ -33,11 +36,17 @@ public class ApiMessageController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     void send(@Valid @RequestBody MessageDTO messageDTO)  {
-        try {
-            messageProducer.send(messageDTO.getCategoryId(), messageDTO.getMessageBody());
-        } catch (Exception e) {
-            log.error("#NOTIFICATIONS-D-C - Error /api/messages {}", e.getMessage());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+
+        if (kafkaHealthService.isKafkaUp()) {
+            try {
+                messageProducer.send(messageDTO.getCategoryId(), messageDTO.getMessageBody());
+            } catch (Exception e) {
+                log.error("#NOTIFICATIONS-D-C - Error /api/messages {}", e.getMessage());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            }
+        } else {
+            log.error("#NOTIFICATIONS-D-C - Error /api/messages {}", "Kafka not reachable.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Kafka not reachable.");
         }
     }
 }
