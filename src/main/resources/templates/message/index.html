@@ -23,7 +23,7 @@
     </div>
 
     <div id="buttons" class="flex gap-x-6 bg-white-500 px-6 py-2.5 sm:px-1.5">
-            <button
+            <button th:hidden="${isNotKafkaUp}"
                 type="button"
                 class="rounded-md bg-green-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 m-4"
                 style="text-wrap: nowrap;"
@@ -72,7 +72,7 @@
 
                         </div>
                         <div class="col" style="text-align: right;">
-                            <button
+                            <button id="sendMessageButton" th:hidden="${isNotKafkaUp}"
                                     type="submit"
                                     class="rounded-md bg-green-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 m-4"
                                     style="text-wrap: nowrap;">

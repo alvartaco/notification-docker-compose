@@ -1,6 +1,6 @@
  FROM openjdk:21
  EXPOSE 6868
- ADD target/notification-docker-compose-0.0.1-SNAPSHOT.jar notifications-app.jar
+ ADD target/notification-docker-compose-0.0.2-SNAPSHOT.jar notifications-app.jar
  ENTRYPOINT ["java", "-jar", "notifications-app.jar"]
 
 ### ARG JAR_FILE=target/*.jar
