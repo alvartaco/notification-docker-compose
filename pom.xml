@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>dev.alvartaco</groupId>
 	<artifactId>notification-docker-compose</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>notification-docker-compose</name>
 	<description>Notifications Test Docker Compose</description>
 	<url/>

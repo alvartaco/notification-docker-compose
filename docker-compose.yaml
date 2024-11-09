@@ -2,7 +2,7 @@
 services:
 
   app:
-    image: 'alvartaco/notification-docker-compose:0.0.1'
+    image: 'alvartaco/notification-docker-compose:0.0.2'
     build:
         context: .
     container_name: notification-docker-compose-app
