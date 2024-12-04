@@ -69,7 +69,7 @@ For buildeng the application uses:
 
     -> Docker Compose Image : https://hub.docker.com/r/alvartaco/notification-docker-compose
 
-        -> Start Docker : /notification-docker-compose$ docker-compose up -d  
+        -> Start Docker from Project's (cloned/downloaded) sorce folder: /notification-docker-compose$ docker-compose up -d  
 
     -> *Needs to be added to hosts for building the app: 127.0.0.1       broker
 
