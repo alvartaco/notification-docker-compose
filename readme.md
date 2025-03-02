@@ -69,13 +69,16 @@ For buildeng the application uses:
 
     -> Docker Compose Image : https://hub.docker.com/r/alvartaco/notification-docker-compose
 
-        -> Start Docker : /notification-docker-compose$ docker-compose up -d  
+    -> Start Docker Compose from this Github Project's (cloned/downloaded) sorce folder: 
+            /notification-docker-compose$ docker-compose up -d  
+
+            -> Then RUN the Application from your IDE.
 
     -> *Needs to be added to hosts for building the app: 127.0.0.1       broker
 
     -> JDK : 21
 
-    -> HTTP Port External App: 8080
+    -> HTTP Port External App: 8082
 
     -> HTTP Port Docker Internal App: 6868
 
