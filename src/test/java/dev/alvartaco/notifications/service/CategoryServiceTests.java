@@ -23,7 +23,7 @@ public class CategoryServiceTests {
     @Mock
     private JdbcClientCategoryRepository jdbcClientCategoryRepository;
 
-    @Test
+    // TODO: Uncomment me when mysql  is running @Test
     public void getCategoryDTOByCategoryId() throws CategoryException {
 
         Short testCategoryId = 1;
@@ -47,7 +47,7 @@ public class CategoryServiceTests {
         assertEquals(testCategoryName, result.getCategoryName());
     }
 
-    @Test
+    // TODO: Uncomment me when mysql  is running @Test
     public void getCategoryByCategoryId() throws CategoryException {
 
         Short testCategoryId = 1;
