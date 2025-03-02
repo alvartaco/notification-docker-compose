@@ -69,10 +69,25 @@ For buildeng the application uses:
 
     -> Docker Compose Image : https://hub.docker.com/r/alvartaco/notification-docker-compose
 
-    -> Start Docker Compose from this Github Project's (cloned/downloaded) sorce folder: 
-            /notification-docker-compose$ docker-compose up -d  
+    -> RUNNING the Web App:
 
-            -> Then RUN the Application from your IDE.
+        -> Clone or unzip this Project code.
+
+        -> Build the Application with: 
+        
+            /notification-docker-compose$ mvn clean install
+
+        -> Start Docker Compose from this Github Project's (cloned/downloaded) sorce folder: 
+        
+            /notification-docker-compose$ docker-compose up -d  
+                  
+        -> Start the Application: 
+
+            java -jar target/notification-docker-compose-0.0.2-SNAPSHOT.jar
+
+            Note: If application fails to start, try restaring mysql, then restart the app.
+
+        ==>> GO TO : http://localhost:8082      
 
     -> *Needs to be added to hosts for building the app: 127.0.0.1       broker
 
