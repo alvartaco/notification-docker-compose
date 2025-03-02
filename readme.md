@@ -73,13 +73,21 @@ For buildeng the application uses:
 
         -> Clone or unzip this Project code.
 
-        -> Build the Application with : 
+        -> Build the Application with: 
+        
             /notification-docker-compose$ mvn clean install
-            
-            or Run it from your IDE.
 
         -> Start Docker Compose from this Github Project's (cloned/downloaded) sorce folder: 
+        
             /notification-docker-compose$ docker-compose up -d  
+                  
+        -> Start the Application: 
+
+            java -jar target/notification-docker-compose-0.0.2-SNAPSHOT.jar
+
+            Note: If application fails to start, try restaring mysql, then restart the app.
+
+        ==>> GO TO : http://localhost:8082      
 
     -> *Needs to be added to hosts for building the app: 127.0.0.1       broker
 
@@ -126,7 +134,7 @@ The Log and some json files, related to users and categories are also uploaded i
 
 In order to test creation of Messages, that fire the Notifications the User's that are Subscribed, using the REST API; this command can be executed:
 
-    curl -X POST localhost:nnnn/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
+    curl -X POST localhost:8082/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
 
 Latest Commit includes the Notifications Sent List:
 
