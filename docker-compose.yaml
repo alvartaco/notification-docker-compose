@@ -15,7 +15,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
     ports:
-      - "6868:8080"
+      - "6868:8082"
 
   mysql:
     image: mysql:8.0.32
