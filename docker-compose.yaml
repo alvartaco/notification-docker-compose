@@ -1,4 +1,5 @@
 
+
 services:
 
   app:
@@ -9,14 +10,27 @@ services:
     depends_on:
       - mysql
       - broker
+      - mongo-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/notifications
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_DATA_MONGODB_URI=mongodb://root:password@mongo-db:27017/userData
     ports:
       - "6868:8082"
 
+  mongo-db:
+    image: mongo:7.0.3
+    container_name: mongo-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./files/mongo:/docker-entrypoint-initdb.d
   mysql:
     image: mysql:8.0.32
     container_name: mysql
@@ -65,4 +79,7 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'
       KAFKA_CLUSTERS_0_NAME: wizard_test
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:29092
+
+volumes:
+  mongo-data:
 
