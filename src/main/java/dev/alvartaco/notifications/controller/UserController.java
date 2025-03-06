@@ -5,7 +5,7 @@ import dev.alvartaco.notifications.repository.secure.IUserRepository;
 import dev.alvartaco.notifications.response.AuthResponse;
 import dev.alvartaco.notifications.securityconfig.JwtProvider;
 import dev.alvartaco.notifications.service.secure.IUserService;
-import dev.alvartaco.notifications.service.secure.IUserServiceImplementation;
+import dev.alvartaco.notifications.service.secure.UserServiceImplementation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,16 +25,16 @@ public class UserController {
 
     private final IUserRepository iUserRepository;
     private final PasswordEncoder passwordEncoder;
-    private final IUserServiceImplementation iUserServiceImplementation;
+    private final UserServiceImplementation userServiceImplementation;
     private final IUserService iUserService;
 
     public UserController(IUserRepository iUserRepository,
                           PasswordEncoder passwordEncoder,
-                          IUserServiceImplementation iUserServiceImplementation,
+                          UserServiceImplementation userServiceImplementation,
                           IUserService iUserService){
         this.iUserRepository = iUserRepository;
         this.passwordEncoder = passwordEncoder;
-        this.iUserServiceImplementation = iUserServiceImplementation;
+        this.userServiceImplementation = userServiceImplementation;
         this.iUserService = iUserService;
     }
 
@@ -50,6 +50,7 @@ public class UserController {
         if (isEmailExist != null) {
             throw new Exception("Email Is Already Used With Another Account");
         }
+
         User createdUser = new User();
         createdUser.setEmail(email);
         createdUser.setFullName(fullName);
@@ -58,18 +59,18 @@ public class UserController {
         createdUser.setPassword(passwordEncoder.encode(password));
 
         User savedUser = iUserRepository.save(createdUser);
-        //iUserRepository.save(savedUser);
+
         Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = JwtProvider.generateToken(authentication);
-
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(token);
         authResponse.setMessage("Register Success");
         authResponse.setStatus(true);
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        authResponse.setUser(iUserService.findUserByEmail(email));
 
+        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
     }
 
 
@@ -82,13 +83,13 @@ public class UserController {
 
         Authentication authentication = authenticate(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String token = JwtProvider.generateToken(authentication);
-        AuthResponse authResponse = new AuthResponse();
 
+        AuthResponse authResponse = new AuthResponse();
         authResponse.setMessage("Login success");
         authResponse.setJwt(token);
         authResponse.setStatus(true);
+        authResponse.setUser(iUserService.findUserByEmail(email));
 
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
@@ -98,7 +99,7 @@ public class UserController {
 
         System.out.println(username + "---++----" + password);
 
-        UserDetails userDetails = iUserServiceImplementation.loadUserByUsername(username);
+        UserDetails userDetails = userServiceImplementation.loadUserByUsername(username);
 
         System.out.println("Sig in in user details" + userDetails);
 

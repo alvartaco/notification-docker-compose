@@ -17,7 +17,22 @@ function SignupPage() {
     const [error, setError] = useState(''); // State to manage error messages
     const history = useNavigate(); // Get the history object for redirection
 
+    // Email validation function using regex
+    const validateEmail = (email) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return emailRegex.test(email);
+    };
+
     const handleSignup = async () => {
+        // Reset error message
+        setError('');
+
+        // Email validation
+        if (!validateEmail(email)) {
+            setError('Please enter a valid email address.');
+            return;
+        }
+
         try {
             // Check for empty fields
             if (!fullName || !email || !password || !confirmPassword || !mobile) {
@@ -38,11 +53,20 @@ function SignupPage() {
             });
             // Handle successful signup
             console.log(response.data);
+            // Store user data in local storage
+            localStorage.setItem('user', JSON.stringify(response.data));
             history('/dashboard');
         } catch (error) {
             // Handle signup error
             console.error('Signup failed:', error.response ? error.response.data : error.message);
             setError(error.response ? error.response.data : error.message);
+        }
+    };
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+        if(error==='Please enter a valid email address.'){
+            setError('');
         }
     };
 
@@ -56,7 +80,7 @@ function SignupPage() {
                     <MDBInput wrapperClass='mb-3' id='fullName' label={"Full Name"} value={fullName} type='text'
                               onChange={(e) => setFullName(e.target.value)}/>
                     <MDBInput wrapperClass='mb-3' label='Email Address' id='email' value={email} type='email'
-                              onChange={(e) => setEmail(e.target.value)}/>
+                              onChange={handleEmailChange}/>
                     <MDBInput wrapperClass='mb-3' label='Password' id='password' type='password' value={password}
                               onChange={(e) => setPassword(e.target.value)}/>
                     <MDBInput wrapperClass='mb-3' label='Confirm Password' id='confirmPassword' type='password'

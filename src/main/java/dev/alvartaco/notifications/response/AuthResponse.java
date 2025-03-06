@@ -1,5 +1,6 @@
 package dev.alvartaco.notifications.response;
 
+import dev.alvartaco.notifications.model.secure.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ public class AuthResponse {
     private String jwt;
     private String message;
     private Boolean status;
+    private User user;
 
     public String getJwt() {
         return jwt;
@@ -32,6 +34,14 @@ public class AuthResponse {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
 
