@@ -2,6 +2,7 @@ package dev.alvartaco.notifications.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,9 +43,8 @@ public class JwtProvider {
 
     @SuppressWarnings("deprecation")
     public static String getEmailFromJwtToken(String jwt) {
-        jwt = jwt.substring(7); // Assuming "Bearer " is removed from the token
+        //jwt = jwt.substring(7); // Assuming "Bearer " is removed from the token
         try {
-            //Claims claims=Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
             Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
             String email = String.valueOf(claims.get("email"));
             System.out.println("Email extracted from JWT: " + claims);
@@ -54,6 +54,23 @@ public class JwtProvider {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private static java.security.Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode("your-secret-key-here");
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 }

@@ -6,6 +6,9 @@ import dev.alvartaco.notifications.response.AuthResponse;
 import dev.alvartaco.notifications.security.JwtProvider;
 import dev.alvartaco.notifications.service.secure.IUserService;
 import dev.alvartaco.notifications.service.secure.UserServiceImplementation;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,10 +17,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/auth")
@@ -70,7 +73,7 @@ public class UserController {
         authResponse.setStatus(true);
         authResponse.setUser(iUserService.findUserByEmail(email));
 
-        return new ResponseEntity<AuthResponse>(authResponse, HttpStatus.OK);
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
 
@@ -104,7 +107,7 @@ public class UserController {
         System.out.println("Sig in in user details" + userDetails);
 
         if (userDetails == null) {
-            System.out.println("Sign in details - null" + userDetails);
+            System.out.println("Sign in details - null" );
 
             throw new BadCredentialsException("Invalid username and password");
         }
@@ -116,6 +119,24 @@ public class UserController {
         }
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<Object> validateAndRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+            if (JwtProvider.getEmailFromJwtToken(token) != null) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(URI.create("http://localhost:8082/web"));
+                return new ResponseEntity<>(headers, HttpStatus.FOUND);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+        return null;
     }
 
 

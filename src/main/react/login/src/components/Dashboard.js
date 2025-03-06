@@ -15,9 +15,23 @@ function WelcomeDashboard() {
 
     const handleContinue = async () => {
         try {
+            const jwtToken = localStorage.getItem('jwtToken');
+            // Set the token as a cookie before redirecting
+            document.cookie = `jwtToken=${jwtToken}; path=/; domain=localhost`;
+            window.location.href = 'http://localhost:8082/web';
+        } catch (error) {
+            console.error('Error redirecting to /web:', error);
+        }
+    };
+
+
+    const handleContinueORI = async () => {
+        try {
             // Make a request to /web using axiosInstance
-            //await axiosInstance.get('http://localhost:8082/auth/validate');
-            fetchDataWithJwt('http://localhost:8082/auth/validate');
+            const response = await axiosInstance.get('http://localhost:8082/auth/validate');
+            const redirect = response.data;
+            console.log('Redirect...', redirect);
+            //fetchDataWithJwt('http://localhost:8082/auth/validate');
         } catch (error) {
             console.error('Error redirecting to /auth/validate:', error);
             // Handle the error (e.g., show a message to the user)

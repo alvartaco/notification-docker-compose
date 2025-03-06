@@ -1,5 +1,7 @@
 package dev.alvartaco.notifications.security;
 
+import dev.alvartaco.notifications.service.secure.UserServiceImplementation;
+import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,14 +24,24 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final UserServiceImplementation userServiceImplementation;
+
+    public SecurityConfig(UserServiceImplementation userServiceImplementation) {
+        this.userServiceImplementation = userServiceImplementation;
+    }
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http    .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(this::customizeAuthorization) // use method to configure
-                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+                //.addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                ;
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/web/**").permitAll()
+                        .anyRequest().authenticated())
+                .addFilterBefore(new JwtTokenCookieFilter(userServiceImplementation), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
