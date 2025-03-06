@@ -36,8 +36,7 @@ public class SecurityConfig {
         authorize
                 .requestMatchers("/api/**").authenticated() // Restrict api
                 .requestMatchers("/auth/**").permitAll() // Allow auth
-                .requestMatchers("/web/**").authenticated() // Allow web
-                .anyRequest().permitAll(); // Allow all the other requests.
+                .requestMatchers("/web/**").authenticated(); // restricted web
     }
 
     private CorsConfigurationSource corsConfigurationSource() {

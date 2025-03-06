@@ -1,6 +1,7 @@
 // WelcomeDashboard.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate} from 'react-router-dom'; // Import useHistory hook
+import axiosInstance from '../api/axiosInstance';
 
 function WelcomeDashboard() {
     const history = useNavigate();
@@ -11,9 +12,27 @@ function WelcomeDashboard() {
         // After logout, redirect to the login page
         history('/');
     };
-    const handleContinue = () => {
-        window.top.location.href = "http://localhost:8082/web";
+
+    const handleContinue = async () => {
+        try {
+            // Make a request to /web using axiosInstance
+            //await axiosInstance.get('http://localhost:8082/auth/validate');
+            fetchDataWithJwt('http://localhost:8082/auth/validate');
+        } catch (error) {
+            console.error('Error redirecting to /auth/validate:', error);
+            // Handle the error (e.g., show a message to the user)
+        }
     };
+
+    // Example using fetch API for an HTMX request
+    async function fetchDataWithJwt(url) {
+        const jwtToken = localStorage.getItem('jwtToken');
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${jwtToken}` // Send as a Bearer token
+            }
+        });
+    }
 
     useEffect(() => {
         // Retrieve user data from local storage

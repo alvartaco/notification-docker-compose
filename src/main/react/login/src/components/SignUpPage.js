@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom'; // Import useHistory hook
 import {
     MDBContainer,
@@ -44,7 +45,7 @@ function SignupPage() {
                 throw new Error("Passwords do not match");
             }
 
-            const response = await axios.post('http://localhost:8082/auth/signup', {
+            const response = await axiosInstance.post('http://localhost:8082/auth/signup', {
                 fullName,
                 email,
                 password,
