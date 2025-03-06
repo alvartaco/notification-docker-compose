@@ -26,7 +26,7 @@
                 type="button"
                 class="rounded-md bg-green-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 m-4"
                 style="text-wrap: nowrap;"
-                onclick="location.href='/web/message';">
+                onclick="location.href='/web';">
                 Create Message
             </button>
             <button
@@ -38,4 +38,15 @@
         <div class="flex flex-1 justify-end">&nbsp;</div>
     </div>
 </body>
+<script>
+    // Function to add the JWT token to the Authorization header of every request
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        const tokenString = localStorage.getItem('jwtToken');
+        if (tokenString) {
+            const token = tokenString;
+            event.detail.headers['Authorization'] = 'Bearer ' + token;
+            console.log("Token sent: " + token);
+        }
+    });
+</script>
 </html>

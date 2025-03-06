@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import {
     MDBContainer,
@@ -36,10 +37,14 @@ function LoginPage() {
             }
 
             try {
-                const response = await axios.post('http://localhost:8082/auth/signin', { email, password });
+                const response = await axiosInstance.post('http://localhost:8082/auth/signin', { email, password });
                 console.log('Login successful:', response.data);
                 // Store user data in local storage
                 localStorage.setItem('user', JSON.stringify(response.data));
+
+                //localStorage.setItem('jwtToken', response.data.jwt);
+                //console.log('jwtToken:', response.data.jwt);
+
                 history('/dashboard');
             } catch (error) {
                 console.error('Login failed:', error.response ? error.response.data : error.message);
