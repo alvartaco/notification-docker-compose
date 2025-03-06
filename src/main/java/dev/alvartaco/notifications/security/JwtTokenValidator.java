@@ -1,4 +1,4 @@
-package dev.alvartaco.notifications.securityconfig;
+package dev.alvartaco.notifications.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

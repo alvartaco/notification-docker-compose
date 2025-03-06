@@ -1,6 +1,7 @@
 // WelcomeDashboard.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate} from 'react-router-dom'; // Import useHistory hook
+//import authInterceptor from '../authInterceptor'; // Import the interceptor
 
 function WelcomeDashboard() {
     const history = useNavigate();
@@ -23,6 +24,17 @@ function WelcomeDashboard() {
             // Assuming your API returns a 'fullName' field
             setUsername(user.user.fullName);
         }
+
+        // Test the connection with the secured route
+        // const testApiConnection = async () => {
+        //     try {
+        //         const response = await authInterceptor.get('/api/messages'); // Adjust the endpoint if needed
+        //         console.log('Secured API connection successful:', response.data);
+        //     } catch (error) {
+        //         console.error('Error in secured API connection:', error);
+        //     }
+        // };
+        // testApiConnection();
     }, []);
 
     return (

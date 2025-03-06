@@ -1,4 +1,4 @@
-package dev.alvartaco.notifications.securityconfig;
+package dev.alvartaco.notifications.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
-public class ApplicationConfig {
+public class SecurityConfig {
 
     @SuppressWarnings("deprecation")
     @Bean

@@ -3,7 +3,7 @@ package dev.alvartaco.notifications.controller;
 import dev.alvartaco.notifications.model.secure.User;
 import dev.alvartaco.notifications.repository.secure.IUserRepository;
 import dev.alvartaco.notifications.response.AuthResponse;
-import dev.alvartaco.notifications.securityconfig.JwtProvider;
+import dev.alvartaco.notifications.security.JwtProvider;
 import dev.alvartaco.notifications.service.secure.IUserService;
 import dev.alvartaco.notifications.service.secure.UserServiceImplementation;
 import org.springframework.http.HttpStatus;

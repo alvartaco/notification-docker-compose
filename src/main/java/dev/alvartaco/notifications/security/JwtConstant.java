@@ -1,4 +1,4 @@
-package dev.alvartaco.notifications.securityconfig;
+package dev.alvartaco.notifications.security;
 
 public class JwtConstant {
     public static final String SECRET_KEY = "wpembytrwcvnryxksdbqwjebruyGHyudqgwveytrtrCSnwifoesarjbwe";
