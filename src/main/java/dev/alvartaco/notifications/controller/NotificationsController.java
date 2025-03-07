@@ -18,7 +18,7 @@ import java.util.List;
  * It wil display the notifications list
  */
 @Controller
-@RequestMapping("/notifications")
+@RequestMapping("/web/notifications")
 public class NotificationsController {
 
     private static final Logger log = LoggerFactory.getLogger(NotificationsController.class);
