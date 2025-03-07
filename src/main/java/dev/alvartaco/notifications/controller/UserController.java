@@ -8,6 +8,8 @@ import dev.alvartaco.notifications.service.secure.IUserService;
 import dev.alvartaco.notifications.service.secure.UserServiceImplementation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import java.net.URI;
 @RequestMapping("/auth")
 public class UserController {
 
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final IUserRepository iUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserServiceImplementation userServiceImplementation;
@@ -82,7 +85,7 @@ public class UserController {
         String email = loginRequest.getEmail();
         String password = loginRequest.getPassword();
 
-        System.out.println(email + "-------" + password);
+        log.info("{}-------{}", email, password);
 
         Authentication authentication = authenticate(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -100,19 +103,19 @@ public class UserController {
 
     private Authentication authenticate(String username, String password) {
 
-        System.out.println(username + "---++----" + password);
+        log.info("{}---++----{}", username, password);
 
         UserDetails userDetails = userServiceImplementation.loadUserByUsername(username);
 
-        System.out.println("Sig in in user details" + userDetails);
+        log.info("Sig in in user details{}", userDetails);
 
         if (userDetails == null) {
-            System.out.println("Sign in details - null" );
+            log.info("Sign in details - null");
 
             throw new BadCredentialsException("Invalid username and password");
         }
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            System.out.println("Sign in userDetails - password mismatch" + userDetails);
+            log.info("Sign in userDetails - password mismatch{}", userDetails);
 
             throw new BadCredentialsException("Invalid password");
 

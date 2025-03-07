@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -14,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class JwtProvider {
+    private static final Logger log = LoggerFactory.getLogger(JwtProvider.class);
     static SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
 
     public static String generateToken(Authentication auth) {
@@ -27,7 +30,7 @@ public class JwtProvider {
                 .claim( "authorities",roles)
                 .signWith(key)
                 .compact();
-        System.out.println("Token for parsing in JwtProvider: " + jwt);
+        log.info("Token for parsing in JwtProvider: {}", jwt);
         return jwt;
 
     }
@@ -51,11 +54,10 @@ public class JwtProvider {
         try {
             Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
             String email = String.valueOf(claims.get("email"));
-            System.out.println("Email extracted from JWT: " + claims);
+            log.info("Email extracted from JWT: {}", claims);
             return email;
         } catch (Exception e) {
-            System.err.println("Error extracting email from JWT: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error extracting email from JWT: {}", e.getMessage());
             return null;
         }
     }
@@ -72,10 +74,4 @@ public class JwtProvider {
         }
     }
 
-    /*
-    private static java.security.Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode("your-secret-key-here");
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-    */
 }
