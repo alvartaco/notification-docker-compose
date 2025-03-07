@@ -18,7 +18,7 @@ function WelcomeDashboard() {
             const jwtToken = localStorage.getItem('jwtToken');
             // Set the token as a cookie before redirecting
             const expirationDate = new Date();
-            expirationDate.setTime(expirationDate.getTime() + (30 * 1000)); // 30 seconds
+            expirationDate.setTime(expirationDate.getTime() + (60 * 1000)); // 60 seconds
             document.cookie = `jwtToken=${jwtToken}; path=/; domain=localhost; expires=${expirationDate.toUTCString()}`;
             window.location.href = 'http://localhost:8082/web';
         } catch (error) {
