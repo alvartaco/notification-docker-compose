@@ -1,13 +1,12 @@
 package dev.alvartaco.notifications.security;
 
 import dev.alvartaco.notifications.service.secure.UserServiceImplementation;
-import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,31 +24,37 @@ import java.util.List;
 public class SecurityConfig {
 
     private final UserServiceImplementation userServiceImplementation;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public SecurityConfig(UserServiceImplementation userServiceImplementation) {
+    public SecurityConfig(UserServiceImplementation userServiceImplementation,
+                          JwtAccessDeniedHandler jwtAccessDeniedHandler,
+                          JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.userServiceImplementation = userServiceImplementation;
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http    .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(this::customizeAuthorization) // use method to configure
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/web/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/**").authenticated() // Restrict api
+                        .requestMatchers("/web/**").authenticated() // restricted web
+                        .requestMatchers("/auth/**").permitAll() // Allow auth
+                        .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll() // Allow signup
+                        .requestMatchers(HttpMethod.POST, "/auth/signin").permitAll()// Allow signin
+                        .requestMatchers("/error/**").permitAll() // Allow the error pages!
+                        .anyRequest().permitAll()) // everything else needs to be public
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler))
                 .addFilterBefore(new JwtTokenCookieFilter(userServiceImplementation), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-    }
-
-    private void customizeAuthorization(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorize) {
-        authorize
-                .requestMatchers("/api/**").authenticated() // Restrict api
-                .requestMatchers("/auth/**").permitAll() // Allow auth
-                .requestMatchers("/web/**").authenticated(); // restricted web
     }
 
     private CorsConfigurationSource corsConfigurationSource() {
