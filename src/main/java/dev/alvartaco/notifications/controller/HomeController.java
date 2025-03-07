@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Controller for the Home page
  */
 @Controller
-@RequestMapping("/web")
 public class HomeController {
 
     private static final Logger log = LoggerFactory.getLogger(HomeController.class);
@@ -24,6 +23,7 @@ public class HomeController {
         this.kafkaHealthService = kafkaHealthService;
     }
 
+    @GetMapping("/web")
     public String home(Model model) {
         log.info("#NOTIFICATIONS-D-C - INSIDE /");
 

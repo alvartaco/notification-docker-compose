@@ -121,6 +121,7 @@ public class UserController {
 
     }
 
+    /*
     @GetMapping("/validate")
     public ResponseEntity<Object> validateAndRedirect(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String token = request.getHeader("Authorization");
@@ -138,6 +139,6 @@ public class UserController {
         }
         return null;
     }
-
+    */
 
 }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.List;
  * Controller for message creation handling Page
  */
 @Controller
-@RequestMapping("/web")
 public class  MessageController {
 
     static final String MESSAGE = "message";
@@ -41,7 +39,7 @@ public class  MessageController {
     /**
      * Entry point for the message creation Form
      */
-    @GetMapping("")
+    @GetMapping("/web/message")
     public String message(@RequestParam(defaultValue = "") String error,
                           @RequestParam(defaultValue = "") String message,
                           Model model) {
@@ -73,12 +71,12 @@ public class  MessageController {
     /**
      * Method that calls the service to store the message in the DB
      */
-    @PostMapping("/create")
+    @PostMapping("/web/message/create")
     String createMessage(@RequestParam String categoryId,
                          @RequestParam String messageBody,
                          Model model) {
 
-        log.info("#NOTIFICATIONS-D-C - START /message/create");
+        log.info("#NOTIFICATIONS-D-C - START /web/message/create");
 
         /*
          * Validation for existing in Database categoryId
@@ -86,15 +84,15 @@ public class  MessageController {
          */
         try {
             if (categoryService.getAllCategoryDTOsByCategoryNameAsc().stream().noneMatch(dto -> dto.getCategoryId() == Short.parseShort(categoryId))) {
-                log.error("#NOTIFICATIONS-D-C - Error with received categoryID /message/create");
+                log.error("#NOTIFICATIONS-D-C - Error with received categoryID /web/message/create");
                 return message("ERROR with received Message Category!!!", "", model);
             }
             if (messageBody.isEmpty()) {
-                log.error("#NOTIFICATIONS-D-C - Error with received messageBody /message/create");
+                log.error("#NOTIFICATIONS-D-C - Error with received messageBody /web/message/create");
                 return message("ERROR with received Message Body!!!", "", model);
             }
         } catch (CategoryException e) {
-            log.error("#NOTIFICATIONS-D-C - Error getting categories /message/create, fwd to index.");
+            log.error("#NOTIFICATIONS-D-C - Error getting categories /web/message/create, fwd to index.");
             return "index";
         }
 
@@ -111,7 +109,7 @@ public class  MessageController {
             return message("Message ERROR NOT Saved..!", "", model);
         }
 
-        log.info("#NOTIFICATIONS-D-C - END /message/create");
+        log.info("#NOTIFICATIONS-D-C - END /web/message/create");
         return message("", "Message Saved..!", model);
     }
 }

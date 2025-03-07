@@ -42,8 +42,8 @@ function LoginPage() {
                 // Store user data in local storage
                 localStorage.setItem('user', JSON.stringify(response.data));
 
-                //localStorage.setItem('jwtToken', response.data.jwt);
-                //console.log('jwtToken:', response.data.jwt);
+                localStorage.setItem('jwtToken', response.data.jwt);
+                console.log('jwtToken:', response.data.jwt);
 
                 history('/dashboard');
             } catch (error) {
@@ -70,7 +70,7 @@ function LoginPage() {
             <div className="d-flex justify-content-center align-items-center vh-100">
                 <div className="border rounded-lg p-4" style={{ width: '500px', height: 'auto' }}>
                     <MDBContainer className="p-3">
-                        <h2 className="mb-4 text-center">Login Page</h2>
+                        <h2 className="mb-4 text-center">Notifications Login</h2>
                         <MDBInput
                             wrapperClass='mb-4'
                             label='Email address'

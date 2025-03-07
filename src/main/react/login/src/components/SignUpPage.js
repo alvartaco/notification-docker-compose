@@ -56,6 +56,10 @@ function SignupPage() {
             console.log(response.data);
             // Store user data in local storage
             localStorage.setItem('user', JSON.stringify(response.data));
+
+            localStorage.setItem('jwtToken', response.data.jwt);
+            console.log('jwtToken:', response.data.jwt);
+
             history('/dashboard');
         } catch (error) {
             // Handle signup error
@@ -75,7 +79,7 @@ function SignupPage() {
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div className="border rounded-lg p-4" style={{width: '600px', height: 'auto'}}>
                 <MDBContainer className="p-3">
-                    <h2 className="mb-4 text-center">Sign Up Page</h2>
+                    <h2 className="mb-4 text-center">Notifications Sign Up</h2>
                     {/* Render error message if exists */}
                     {error && <p className="text-danger">{error}</p>}
                     <MDBInput wrapperClass='mb-3' id='fullName' label={"Full Name"} value={fullName} type='text'

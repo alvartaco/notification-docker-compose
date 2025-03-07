@@ -43,7 +43,11 @@ public class JwtProvider {
 
     @SuppressWarnings("deprecation")
     public static String getEmailFromJwtToken(String jwt) {
-        //jwt = jwt.substring(7); // Assuming "Bearer " is removed from the token
+
+        if (jwt.contains("Bearer ")) {
+            jwt = jwt.substring(7); // Remove "Bearer " prefix
+        }
+
         try {
             Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
             String email = String.valueOf(claims.get("email"));
@@ -68,9 +72,10 @@ public class JwtProvider {
         }
     }
 
+    /*
     private static java.security.Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode("your-secret-key-here");
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
+    */
 }
