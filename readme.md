@@ -83,7 +83,7 @@ For buildeng the application uses:
                   
         -> Start the Application: 
 
-            java -jar target/notification-docker-compose-0.0.2-SNAPSHOT.jar
+            java -jar target/notification-docker-compose-0.0.3-SNAPSHOT.jar
 
             Note: If application fails to start, try restaring mysql, then restart the app.
 
