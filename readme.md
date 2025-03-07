@@ -1,6 +1,6 @@
 Notification App.
 
-It is required to create a system capable of receiving messages, which will have a
+It was required to create a system capable of receiving messages, which will have a
 category and the body of the message. These messages will need to be forwarded to
 the system's users, who will already be pre-populated. In addition to being subscribed
 to message categories, these users will have specified the channels through which they
@@ -20,18 +20,18 @@ the sending logic independently:
     • E-Mail
     • Push Notification
 
-It is necessary to design the architecture for sending notifications through various
+It was necessary to design the architecture for sending notifications through various
 channels. At a minimum, there should be one class for each channel, along with a
 strategy to select the appropriate channel. Real messages need not be sent using third-
 party services; the focus is on establishing a structure to implement the logic in the
 future.
 
-Additionally, it is essential to store all the relevant information required to verify that the
+Additionally, it was essential to store all the relevant information required to verify that the
 notification has been successfully delivered to the respective subscriber. This includes
 details such as the message type, notification type, user data, timestamp, and any
 other pertinent information.
 
-No user administration is required, you can use a Mock of users in the source code, and
+No user administration is required, it is used a Mock of users in the source code, and
 they must have the following information:
 
     • ID
@@ -50,7 +50,7 @@ As a user interface, you must display 2 main elements.
 
     • Message. Text area, confirm that the message is not empty.
 
-<!-- 2. Log history. A list of all data records in the log, sorted from newest to oldest.-->
+2. Log history. A list of all data records in the log, sorted from newest to oldest. They are the Notifications sent.
 
 -----------------------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ For buildeng the application uses:
      
      :: Spring Boot ::                (v3.3.4)
 
-    -> Docker Compose : KafKa - KAfKa Ui - MySql
+    -> Docker Compose : KafKa - KAfKa Ui - MySql - MongoDb
 
     -> Docker Compose Image : https://hub.docker.com/r/alvartaco/notification-docker-compose
 
@@ -107,6 +107,8 @@ For buildeng the application uses:
 
     -> HTMX a small JavaScript library that allows you to use custom attributes in HTML
 
+    -> NodeJS and ReactJS for the Login and Registration Fron that uses MongoDB.
+
     -> Dessign Pattern: Factory / Strategy for different notification channels like SMS, e-mail, Push notifications. 
     And Observer for the main objetive of Users receiving updates in their subsctipyed Message Categories.
 
@@ -121,8 +123,6 @@ For buildeng the application uses:
 
 ![img.png](img.png)
 
-
-20241010
 Adding some testing results of the first Iteration:
 
 
@@ -132,10 +132,45 @@ Adding some testing results of the first Iteration:
 
 The Log and some json files, related to users and categories are also uploaded in the root/xDocuments
 
-In order to test creation of Messages, that fire the Notifications the User's that are Subscribed, using the REST API; this command can be executed:
+Without authentication, it was possible to test creation of Messages, that fire the Notifications the User's that are Subscribed, using the REST API; with this command:
 
     curl -X POST localhost:nnnn/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
 
-Latest Commit includes the Notifications Sent List:
+Now it is suggested to use Postman:
+
+Send a Message to /api/messages (using the JWT token / SECRET_KEY ):
+
+Create a new POST request in Postman:
+
+URL: http://localhost:8082/api/messages
+Headers:
+Content-Type: application/json
+Authorization: Bearer your_jwt_token
+Replace your_jwt_token with the token you copied in the previous step.
+
+Body (raw JSON):
+
+{
+"categoryId": "2",
+"messageBody": "This is a test message from Postman"
+}
+
+Important: categoryId and messageBody are mandatory.
+
+Click Send.
+
+Expected Response: A 201 Created response.
+
+Check the logs: you should see the message #NOTIFICATIONS-D-C - Sent message to kafka, category:2, message:This is a test message from Postman! Additional Scenarios to Test (Very Important)
+
+Sent Notifications List:
 
 ![img_1.png](img_1.png)
+
+Latest Version Includes Login + Registration pages implemented with NodeJS and ReactJS.
+
+Users are stored in MongoDB.
+
+Security is Implemented with Spring JWT Security.
+
+Error pages are implemented too.
