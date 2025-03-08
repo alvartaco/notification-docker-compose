@@ -95,7 +95,7 @@ For buildeng the application uses:
 
     -> HTTP Port External App: 8082
 
-    -> HTTP Port Docker Internal App: 6868
+    -> HTTP Port Docker Internal App: 8082
 
     -> KafKa UI : 8081
 

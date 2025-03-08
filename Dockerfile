@@ -1,5 +1,5 @@
  FROM openjdk:21
- EXPOSE 6868
+ EXPOSE 8082
  ADD target/notification-docker-compose-0.0.3-SNAPSHOT.jar notifications-app.jar
  ENTRYPOINT ["java", "-jar", "notifications-app.jar"]
 

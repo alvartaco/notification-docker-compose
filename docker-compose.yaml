@@ -2,8 +2,18 @@
 
 services:
 
+  node-server:
+    build:
+      context: ./src/main/node_server
+      dockerfile: Dockerfile.node
+    container_name: node-server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - app # If your node app need the spring app, then add this dependency
+
   app:
-    image: 'alvartaco/notification-docker-compose:0.0.2'
+    image: 'alvartaco/notification-docker-compose:0.0.3'
     build:
         context: .
     container_name: notification-docker-compose-app
@@ -16,9 +26,9 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
-      - SPRING_DATA_MONGODB_URI=mongodb://root:password@mongo-db:27017/userData
+      - SPRING_DATA_MONGODB_URI=mongodb://root:password@mongo-db:27017/userData?authSource=admin
     ports:
-      - "6868:8082"
+      - "8082:8082"
 
   mongo-db:
     image: mongo:7.0.3
