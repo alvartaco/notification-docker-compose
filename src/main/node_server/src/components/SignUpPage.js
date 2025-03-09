@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-//import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom'; // Import useHistory hook
 import {
     MDBContainer,
