@@ -1,7 +1,6 @@
 // WelcomeDashboard.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate} from 'react-router-dom'; // Import useHistory hook
-//import axiosInstance from '../api/axiosInstance';
 
 function WelcomeDashboard() {
     const history = useNavigate();

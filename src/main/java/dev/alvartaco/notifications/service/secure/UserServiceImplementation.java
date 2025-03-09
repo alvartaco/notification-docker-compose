@@ -2,10 +2,7 @@ package dev.alvartaco.notifications.service.secure;
 
 import dev.alvartaco.notifications.model.secure.User;
 import dev.alvartaco.notifications.repository.secure.IUserRepository;
-import dev.alvartaco.notifications.response.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
