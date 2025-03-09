@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 //import axios from 'axios';
-import axiosInstance from '../api/axiosInstance';
+//import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import {
     MDBContainer,
@@ -20,7 +20,7 @@ function LoginPage() {
         return emailRegex.test(email);
     };
 
-    const handleLogin = async () => {
+    const handleLogin = async (credentials) => {
             // Reset error message
             setError('');
 
@@ -37,15 +37,43 @@ function LoginPage() {
             }
 
             try {
-                const response = await axiosInstance.post('http://localhost:8082/auth/signin', { email, password });
-                console.log('Login successful:', response.data);
-                // Store user data in local storage
-                localStorage.setItem('user', JSON.stringify(response.data));
+               // 1. Get the CSRF token
+               const csrfResponse = await fetch('http://localhost:8082/auth/csrf',
+                    {credentials: 'include'});
+               if (!csrfResponse.ok) {
+                 throw new Error('Failed to get CSRF token');
+               }
 
-                localStorage.setItem('jwtToken', response.data.jwt);
-                console.log('jwtToken:', response.data.jwt);
+                // Extract the CSRF token from the cookie
+                let csrfToken = csrfResponse.headers.get('X-CSRF-TOKEN');
+                // console.log("csrfToken3:" + csrfToken);
+                if (!csrfToken) {
+                    throw new Error('CSRF token not found in headers');
+                }
 
-                history('/dashboard');
+               // 2. Send the login request with the CSRF token
+                const response = await fetch('http://localhost:8082/auth/signin', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': csrfToken, // Include the CSRF token as a header
+                  },
+                  body: JSON.stringify(credentials),
+                  credentials: 'include',// This is crucial for sending cookies
+                });
+
+                if (response.ok) {
+                  const data = await response.json();
+                  localStorage.setItem('jwtToken', data.jwt);
+
+                  // console.log('Login successful:', data);
+                  // Store user data in local storage
+                  localStorage.setItem('user', JSON.stringify(data));
+
+                  history('/dashboard');
+                } else {
+                  throw new Error('Login failed');
+                }
             } catch (error) {
                 console.error('Login failed:', error.response ? error.response.data : error.message);
                 setError('Invalid email or password.');
@@ -91,7 +119,7 @@ function LoginPage() {
                         <MDBBtn
                             className="mb-4 d-block btn-primary"
                             style={{ height: '50px', width: '100%' }}
-                            onClick={handleLogin}
+                            onClick={() => handleLogin({email,password})}
                         >
                             Sign in
                         </MDBBtn>

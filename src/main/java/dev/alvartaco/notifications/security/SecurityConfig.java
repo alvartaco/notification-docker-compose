@@ -1,18 +1,23 @@
 package dev.alvartaco.notifications.security;
 
 import dev.alvartaco.notifications.service.secure.UserServiceImplementation;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -39,8 +44,10 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // Use cookies for CSRF
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/**").authenticated() // Restrict api
@@ -49,10 +56,17 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/signup").permitAll() // Allow signup
                         .requestMatchers(HttpMethod.POST, "/auth/signin").permitAll()// Allow signin
                         .requestMatchers("/error/**").permitAll() // Allow the error pages!
+                        .requestMatchers(HttpMethod.GET, "/auth/csrf").permitAll()// Allow csrf receive
                         .anyRequest().permitAll()) // everything else needs to be public
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                         .accessDeniedHandler(jwtAccessDeniedHandler))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .permitAll()
+                        .logoutSuccessHandler(logoutSuccessHandler()) // Custom logoutSuccessHandler
+                        .invalidateHttpSession(true)
+                )
                 .addFilterBefore(new JwtTokenCookieFilter(userServiceImplementation), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -64,12 +78,10 @@ public class SecurityConfig {
             ccfg.setAllowedMethods(Collections.singletonList("*"));
             ccfg.setAllowCredentials(true);
             ccfg.setAllowedHeaders(Collections.singletonList("*"));
-            ccfg.setExposedHeaders(List.of("Authorization"));
+            ccfg.setExposedHeaders(List.of("Authorization","X-CSRF-TOKEN"));//add X-CSRF-TOKEN
             ccfg.setMaxAge(3600L);
             return ccfg;
-
         };
-
     }
 
     @Bean
@@ -77,4 +89,19 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    LogoutSuccessHandler logoutSuccessHandler() {
+        return (HttpServletRequest request, HttpServletResponse response, Authentication authentication) -> {
+            // Invalidate the JWT cookie
+            Cookie jwtCookie = new Cookie("jwtToken", null);
+            jwtCookie.setMaxAge(0);
+            jwtCookie.setPath("/");
+            jwtCookie.setHttpOnly(true); // Important for security
+            //jwtCookie.setSecure(true); // If using HTTPS
+            response.addCookie(jwtCookie);
+
+            // Redirect to the login page (or wherever you want)
+            response.sendRedirect("http://localhost:3000/");
+        };
+    }
 }
