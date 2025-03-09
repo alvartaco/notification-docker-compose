@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 //import axios from 'axios';
-import axiosInstance from '../api/axiosInstance';
+//import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 import {
     MDBContainer,
@@ -46,7 +46,7 @@ function LoginPage() {
 
                 // Extract the CSRF token from the cookie
                 let csrfToken = csrfResponse.headers.get('X-CSRF-TOKEN');
-                console.log("csrfToken3:" + csrfToken);
+                // console.log("csrfToken3:" + csrfToken);
                 if (!csrfToken) {
                     throw new Error('CSRF token not found in headers');
                 }
@@ -66,7 +66,7 @@ function LoginPage() {
                   const data = await response.json();
                   localStorage.setItem('jwtToken', data.jwt);
 
-                  console.log('Login successful:', data);
+                  // console.log('Login successful:', data);
                   // Store user data in local storage
                   localStorage.setItem('user', JSON.stringify(data));
 

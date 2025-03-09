@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-//import axios from 'axios';
-import axiosInstance from '../api/axiosInstance';
+import axios from 'axios';
+//import axiosInstance from '../api/axiosInstance';
 import { useNavigate } from 'react-router-dom'; // Import useHistory hook
 import {
     MDBContainer,
@@ -45,7 +45,7 @@ function SignupPage() {
                 throw new Error("Passwords do not match");
             }
 
-            const response = await axiosInstance.post('http://localhost:8082/auth/signup', {
+            const response = await axios.post('http://localhost:8082/auth/signup', {
                 fullName,
                 email,
                 password,
@@ -53,12 +53,12 @@ function SignupPage() {
                 mobile
             });
             // Handle successful signup
-            console.log(response.data);
+            // console.log(response.data);
             // Store user data in local storage
             localStorage.setItem('user', JSON.stringify(response.data));
 
             localStorage.setItem('jwtToken', response.data.jwt);
-            console.log('jwtToken:', response.data.jwt);
+            // console.log('jwtToken:', response.data.jwt);
 
             history('/dashboard');
         } catch (error) {
