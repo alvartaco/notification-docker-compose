@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class JwtTokenCookieFilter extends OncePerRequestFilter {
 
@@ -46,8 +47,22 @@ public class JwtTokenCookieFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            extendCookieExpiration(request, response);// Extend the cookie's expiration time
         }
-
         filterChain.doFilter(request, response);
+    }
+
+    private void extendCookieExpiration(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            Arrays.stream(cookies)
+                    .filter(cookie -> "jwtToken".equals(cookie.getName()))
+                    .findFirst()
+                    .ifPresent(cookie -> {
+                        cookie.setMaxAge(2 * 60); // Extend expiration by 1 hour
+                        cookie.setPath("/");
+                        response.addCookie(cookie);
+                    });
+        }
     }
 }

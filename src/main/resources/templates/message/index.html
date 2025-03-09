@@ -97,15 +97,4 @@
         setTimeout(fadeOut, delay);
     </script>
 </body>
-<script>
-    // Function to add the JWT token to the Authorization header of every request
-    document.body.addEventListener('htmx:configRequest', (event) => {
-        const tokenString = localStorage.getItem('jwtToken');
-        if (tokenString) {
-            const token = tokenString;
-            event.detail.headers['Authorization'] = 'Bearer ' + token;
-            console.log("Token sent: " + token);
-        }
-    });
-</script>
 </html>
