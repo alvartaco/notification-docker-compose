@@ -17,35 +17,13 @@ function WelcomeDashboard() {
             const jwtToken = localStorage.getItem('jwtToken');
             // Set the token as a cookie before redirecting
             const expirationDate = new Date();
-            expirationDate.setTime(expirationDate.getTime() + (60 * 1000)); // 60 seconds
+            expirationDate.setTime(expirationDate.getTime() + (2 * 60)); // 2 minutes
             document.cookie = `jwtToken=${jwtToken}; path=/; domain=localhost; expires=${expirationDate.toUTCString()}`;
             window.location.href = 'http://localhost:8082/web';
         } catch (error) {
             console.error('Error redirecting to /web:', error);
         }
     };
-
-    // const handleContinueORI = async () => {
-    //     try {
-    //         // Make a request to /web using axiosInstance
-    //         const response = await axiosInstance.get('http://localhost:8082/auth/validate');
-    //         const redirect = response.data;
-    //         console.log('Redirect...', redirect);
-    //         //fetchDataWithJwt('http://localhost:8082/auth/validate');
-    //     } catch (error) {
-    //         console.error('Error redirecting to /auth/validate:', error);
-    //         // Handle the error (e.g., show a message to the user)
-    //     }
-    // };
-    // Example using fetch API for an HTMX request
-    // async function fetchDataWithJwt(url) {
-    //     const jwtToken = localStorage.getItem('jwtToken');
-    //     const response = await fetch(url, {
-    //         headers: {
-    //             'Authorization': `Bearer ${jwtToken}` // Send as a Bearer token
-    //         }
-    //     });
-    // }
 
     useEffect(() => {
         // Retrieve user data from local storage
@@ -66,9 +44,6 @@ function WelcomeDashboard() {
                 <p className="text-center">You are logged in successfully.</p>
                 <div className="text-center">
                     <button type="button" className="btn btn-primary mt-3" onClick={handleContinue}>HTMX Notifications App.</button>
-                </div>
-                <div className="text-center">
-                    <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>Logout</button>
                 </div>
             </div>
         </div>

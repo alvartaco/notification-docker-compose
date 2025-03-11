@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
     MDBContainer,
     MDBInput,
@@ -10,7 +9,6 @@ function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const history = useNavigate();
 
     // Email validation function using regex
     const validateEmail = (email) => {
@@ -44,7 +42,6 @@ function LoginPage() {
 
                 // Extract the CSRF token from the cookie
                 let csrfToken = csrfResponse.headers.get('X-CSRF-TOKEN');
-                // console.log("csrfToken3:" + csrfToken);
                 if (!csrfToken) {
                     throw new Error('CSRF token not found in headers');
                 }
@@ -64,11 +61,15 @@ function LoginPage() {
                   const data = await response.json();
                   localStorage.setItem('jwtToken', data.jwt);
 
-                  // console.log('Login successful:', data);
-                  // Store user data in local storage
-                  localStorage.setItem('user', JSON.stringify(data));
-
-                  history('/dashboard');
+                  try {
+                      // Set the token as a cookie before redirecting
+                      const expirationDate = new Date();
+                      expirationDate.setTime(expirationDate.getTime() + (2 * 60)); // 2 minutes
+                      document.cookie = `jwtToken=${data.jwt}; path=/; domain=localhost; expires=${expirationDate.toUTCString()}`;
+                      window.location.href = 'http://localhost:8082/web';
+                  } catch (error) {
+                      console.error('Error redirecting to /web:', error);
+                  }
                 } else {
                   throw new Error('Login failed');
                 }
@@ -90,7 +91,6 @@ function LoginPage() {
                 setError('');
             }
         };
-
 
     return (
             <div className="d-flex justify-content-center align-items-center vh-100">
@@ -117,8 +117,7 @@ function LoginPage() {
                         <MDBBtn
                             className="mb-4 d-block btn-primary"
                             style={{ height: '50px', width: '100%' }}
-                            onClick={() => handleLogin({email,password})}
-                        >
+                            onClick={() => handleLogin({email,password})}>
                             Sign in
                         </MDBBtn>
                         <div className="text-center">

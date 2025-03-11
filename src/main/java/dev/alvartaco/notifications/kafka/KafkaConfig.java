@@ -19,7 +19,8 @@ import java.util.Map;
 public class KafkaConfig {
 
   @Bean
-  public ConcurrentKafkaListenerContainerFactory<String, MessageDTO> kafkaListenerContainerFactory(
+  public ConcurrentKafkaListenerContainerFactory<String, MessageDTO>
+        kafkaListenerContainerFactory(
           ConsumerFactory<String, MessageDTO> consumerFactory) {
       ConcurrentKafkaListenerContainerFactory<String, MessageDTO> factory =
             new ConcurrentKafkaListenerContainerFactory<>();
