@@ -65,37 +65,52 @@ For buildeng the application uses:
      
      :: Spring Boot ::                (v3.3.4)
 
-    -> Docker Compose : KafKa - KAfKa Ui - MySql - MongoDb
+    -> Docker Compose : SpringBoot - KafKa - KAfKa Ui - MySql - MongoDb - NodeJs - ReactJs
 
     -> Docker Compose Image : https://hub.docker.com/r/alvartaco/notification-docker-compose
 
-    -> RUNNING the Web App:
+    -> RUNNING the Apps:
 
         -> Clone or unzip this Project code.
 
-        -> Build the Application with: 
+        -> Start Docker Compose from this Github Project's (cloned/downloaded) sorce folder: 
+        
+            /notification-docker-compose$ docker-compose up -d --force-recreate  
+
+        -> Restart ALL Docker Container Services.
+
+        -> Wait for all containers to be up and running.
+
+        ==>> GO TO : http://localhost:3000
+
+    -> Building the Apps:
+
+        -> Build the Spring Boot Application with: 
         
             /notification-docker-compose$ mvn clean install
 
-        -> Start Docker Compose from this Github Project's (cloned/downloaded) sorce folder: 
-        
-            /notification-docker-compose$ docker-compose up -d  
-                  
         -> Start the Application: 
 
             java -jar target/notification-docker-compose-0.0.3-SNAPSHOT.jar
 
-            Note: If application fails to start, try restaring mysql, then restart the app.
+            Note: If application fails to start, try restaring Docker Services.
 
-        ==>> GO TO : http://localhost:8082      
+        -> Build the NodeJS/ReactJS Application with:
 
-    -> *Needs to be added to hosts for building the app: 127.0.0.1       broker
+            /notification-docker-compose/src/main/node_server$ npm install
+            /notification-docker-compose/src/main/node_server$ npm run build
+
+        -> Start the NodeJS Application:
+            
+            /notification-docker-compose/src/main/node_server$ npm start
+
+       ==>> GO TO : http://localhost:3000
 
     -> JDK : 21
 
-    -> HTTP Port External App: 8082
+    -> HTTP Ports External App: 8082 / 3000
 
-    -> HTTP Port Docker Internal App: 8082
+    -> HTTP Ports Docker Internal App: 8082 / 3000
 
     -> KafKa UI : 8081
 
@@ -138,7 +153,8 @@ Without authentication, it was possible to test creation of Messages, that fire 
 
 Now it is suggested to use Postman:
 
-Send a Message to /api/messages (using the JWT token / SECRET_KEY ):
+* Send a Message to /api/messages (using the JWT token / SECRET_KEY / CSRF Token):
+* It needs to be more detailed.!!!! 
 
 Create a new POST request in Postman:
 
