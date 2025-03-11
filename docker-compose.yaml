@@ -3,6 +3,7 @@
 services:
 
   node-server:
+    image: 'alvartaco/notification-docker-compose_node-server:0.0.3'
     build:
       context: ./src/main/node_server
       dockerfile: Dockerfile.node
