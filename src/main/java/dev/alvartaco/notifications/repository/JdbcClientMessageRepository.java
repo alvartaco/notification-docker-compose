@@ -59,9 +59,9 @@ public class JdbcClientMessageRepository implements IMessageRepository{
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
 
-            var updated = jdbcClient.sql("INSERT INTO message(category_id, message_body, message_created_on) " +
-                            "values (?,?,?)")
-                    .params(List.of(message.category().getCategoryId(), message.messageBody(), message.createdOn()))
+            var updated = jdbcClient.sql("INSERT INTO message(category_id, message_body, message_created_on, message_creator_id) " +
+                            "values (?,?,?,?)")
+                    .params(List.of(message.category().getCategoryId(), message.messageBody(), message.createdOn(), message.messageCreatorId()))
                     .update(keyHolder);
             Assert.state(updated == 1, "Failed to create Message, table is empty");
 
@@ -76,7 +76,7 @@ public class JdbcClientMessageRepository implements IMessageRepository{
     }
 
     @Override
-    public Message save(String categoryId, String messageBody) throws NotificationException, MessageException {
+    public Message save(String categoryId, String messageBody, String messageCreatorId) throws NotificationException, MessageException {
         return null;
     }
 

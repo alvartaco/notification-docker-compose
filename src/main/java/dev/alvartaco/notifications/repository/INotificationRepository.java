@@ -12,5 +12,8 @@ import java.util.List;
 public interface INotificationRepository {
 
         Integer create(Notification notification) throws NotificationException;
-        List<NotificationDTO> findAllNotificationDTOsLiFo() throws NotificationException;
+
+        List<NotificationDTO> getAllNotificationDTOsLiFoByMessageCreatorId() throws NotificationException;
+
+        List<NotificationDTO> getAllNotificationDTOsLiFo() throws NotificationException;
 }

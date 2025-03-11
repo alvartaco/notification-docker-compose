@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useHistory hook
 import {
     MDBContainer,
     MDBInput,
@@ -15,7 +13,6 @@ function SignupPage() {
     const [role, setRole] = useState('ROLE_ADMIN');
     const [mobile, setMobileNumber] = useState('');
     const [error, setError] = useState(''); // State to manage error messages
-    const history = useNavigate(); // Get the history object for redirection
 
     // Email validation function using regex
     const validateEmail = (email) => {
@@ -23,7 +20,7 @@ function SignupPage() {
         return emailRegex.test(email);
     };
 
-    const handleSignup = async () => {
+    const handleSignup = async (credentials) => {
         // Reset error message
         setError('');
 
@@ -44,22 +41,52 @@ function SignupPage() {
                 throw new Error("Passwords do not match");
             }
 
-            const response = await axios.post('http://localhost:8082/auth/signup', {
+           // 1. Get the CSRF token
+           const csrfResponse = await fetch('http://localhost:8082/auth/csrf',
+                {credentials: 'include'});
+           if (!csrfResponse.ok) {
+             throw new Error('Failed to get CSRF token');
+           }
+
+            // Extract the CSRF token from the cookie
+            let csrfToken = csrfResponse.headers.get('X-CSRF-TOKEN');
+            if (!csrfToken) {
+                throw new Error('CSRF token not found in headers');
+            }
+
+            const response = await fetch('http://localhost:8082/auth/signup', {
+            method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': csrfToken, // Include the CSRF token as a header
+                  },
+                  body: JSON.stringify(credentials),
+                  credentials: 'include',// This is crucial for sending cookies
+
                 fullName,
                 email,
                 password,
                 role,
                 mobile
             });
-            // Handle successful signup
-            // console.log(response.data);
-            // Store user data in local storage
-            localStorage.setItem('user', JSON.stringify(response.data));
 
-            localStorage.setItem('jwtToken', response.data.jwt);
-            // console.log('jwtToken:', response.data.jwt);
+            if (response.ok) {
+              const data = await response.json();
+              localStorage.setItem('jwtToken', data.jwt);
 
-            history('/dashboard');
+              try {
+                  // Set the token as a cookie before redirecting
+                  const expirationDate = new Date();
+                  expirationDate.setTime(expirationDate.getTime() + (2 * 60)); // 2 minutes
+                  document.cookie = `jwtToken=${data.jwt}; path=/; domain=localhost; expires=${expirationDate.toUTCString()}`;
+                  window.location.href = 'http://localhost:8082/web';
+              } catch (error) {
+                  console.error('Error redirecting to /web:', error);
+              }
+            } else {
+              throw new Error('signup failed');
+            }
+
         } catch (error) {
             // Handle signup error
             console.error('Signup failed:', error.response ? error.response.data : error.message);
@@ -101,7 +128,7 @@ function SignupPage() {
                     </select>
                     <MDBBtn className="mb-4 d-block btn-primary"
                             style={{height: '40px', width: '100%'}}
-                            onClick={handleSignup}>Sign Up
+                            onClick={() => handleSignup({email,password, mobile, fullName})}>Sign Up
                     </MDBBtn>
 
                     <div className="text-center">

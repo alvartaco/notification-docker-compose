@@ -12,8 +12,4 @@ public class CategoryException extends Exception implements Serializable {
             super(errorMsg);
         }
 
-        public CategoryException(String errorMsg, Throwable throwable) {
-            super(errorMsg, throwable);
-        }
-
 }

@@ -21,7 +21,7 @@ public class ApiMessageController {
 
     private static final Logger log = LoggerFactory.getLogger(ApiMessageController.class);
     private final MessageProducer messageProducer;
-    private KafkaHealthService kafkaHealthService;
+    private final KafkaHealthService kafkaHealthService;
 
     public ApiMessageController(MessageProducer messageProducer, KafkaHealthService kafkaHealthService) {
         this.messageProducer = messageProducer;
@@ -30,7 +30,8 @@ public class ApiMessageController {
 
     /**
      * It can be tested with:
-     * $ curl -X POST localhost:8088/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the body"}'
+     * $ curl -X POST localhost:8088/api/messages -H 'Content-type:application/json' -d '{
+     * "categoryId": "2", "messageBody": "the body", "messageCreatorId": "dsdqwe23eweqw"}'
      * @param messageDTO MessageDTO
      */
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,7 +40,8 @@ public class ApiMessageController {
 
         if (kafkaHealthService.isKafkaUp()) {
             try {
-                messageProducer.send(messageDTO.getCategoryId(), messageDTO.getMessageBody());
+                messageProducer.send(messageDTO.getCategoryId(),
+                        messageDTO.getMessageBody(), messageDTO.getMessageCreatorId());
             } catch (Exception e) {
                 log.error("#NOTIFICATIONS-D-C - Error /api/messages {}", e.getMessage());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

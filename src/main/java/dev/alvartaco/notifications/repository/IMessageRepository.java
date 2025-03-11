@@ -12,6 +12,6 @@ public interface IMessageRepository {
 
         Integer create(@Valid Message message) throws MessageException;
 
-        Message save(String categoryId, String messageBody) throws NotificationException, MessageException;
+        Message save(String categoryId, String messageBody, String messageCreatorId) throws NotificationException, MessageException;
 
 }

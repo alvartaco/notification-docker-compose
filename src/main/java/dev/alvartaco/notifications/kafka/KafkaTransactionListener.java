@@ -1,6 +1,5 @@
 package dev.alvartaco.notifications.kafka;
 
-import dev.alvartaco.notifications.exception.MessageException;
 import dev.alvartaco.notifications.exception.NotificationException;
 import dev.alvartaco.notifications.model.dto.MessageDTO;
 import dev.alvartaco.notifications.service.MessageService;
@@ -15,19 +14,20 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class KafkaTransactionListener {
 
-  private final MessageService messageService;
+    private final MessageService messageService;
 
-  @KafkaListener(topics = "messages", groupId = "message-group", containerFactory = "kafkaListenerContainerFactory")
-  @Transactional
-  public void listen(MessageDTO messageDTO) throws NotificationException {
+    @KafkaListener(topics = "messages", groupId = "message-group", containerFactory = "kafkaListenerContainerFactory")
+    @Transactional
+    public void listen(MessageDTO messageDTO) throws NotificationException {
 
-    log.info("#NOTIFICATIONS-D-C - Message Received: {}", messageDTO);
+        log.info("#NOTIFICATIONS-D-C - Message Received: {}", messageDTO);
 
-          messageService.notify(
-                  messageDTO.getCategoryId(),
-                  messageDTO.getMessageBody());
+        messageService.notify(
+                messageDTO.getCategoryId(),
+                messageDTO.getMessageBody(),
+                messageDTO.getMessageCreatorId());
 
-    log.info("#NOTIFICATIONS-D-C - Message saved, notification sent");
+        log.info("#NOTIFICATIONS-D-C - Message saved, notification sent");
 
-  }
+    }
 }

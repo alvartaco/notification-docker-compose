@@ -1,12 +1,14 @@
 package dev.alvartaco.notifications.controller;
 
+import dev.alvartaco.notifications.exception.CategoryException;
 import dev.alvartaco.notifications.kafka.KafkaHealthService;
 import dev.alvartaco.notifications.kafka.MessageProducer;
 import dev.alvartaco.notifications.model.dto.CategoryDTO;
-import dev.alvartaco.notifications.exception.CategoryException;
 import dev.alvartaco.notifications.service.CategoryService;
+import dev.alvartaco.notifications.service.secure.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +21,7 @@ import java.util.List;
  * Controller for message creation handling Page
  */
 @Controller
-public class  MessageController {
+public class MessageController {
 
     static final String MESSAGE = "message";
     static final String ERROR = "error";
@@ -28,12 +30,14 @@ public class  MessageController {
     private final CategoryService categoryService;
     private final MessageProducer messageProducer;
     private final KafkaHealthService kafkaHealthService;
+    private final IUserService iUserService;
 
     public MessageController(CategoryService categoryService,
-                             MessageProducer messageProducer, KafkaHealthService kafkaHealthService) {
+                             MessageProducer messageProducer, KafkaHealthService kafkaHealthService, IUserService iUserService) {
         this.categoryService = categoryService;
         this.messageProducer = messageProducer;
         this.kafkaHealthService = kafkaHealthService;
+        this.iUserService = iUserService;
     }
 
     /**
@@ -74,7 +78,7 @@ public class  MessageController {
     @PostMapping("/web/message/create")
     String createMessage(@RequestParam String categoryId,
                          @RequestParam String messageBody,
-                         Model model) {
+                         Model model, Authentication authentication) {
 
         log.info("#NOTIFICATIONS-D-C - START /web/message/create");
 
@@ -98,8 +102,11 @@ public class  MessageController {
 
         if (kafkaHealthService.isKafkaUp()) {
             log.info("#NOTIFICATIONS-D-C - Sending the Notification of message creation");
-            try {
-                messageProducer.send(categoryId, messageBody);
+            try { // TODO GET ME messageCreatorId
+                String loggedUserEmail = authentication.getName(); // Get email from authentication
+                String messageCreatorId = iUserService.findUserByEmail(loggedUserEmail).getId();
+
+                messageProducer.send(categoryId, messageBody, messageCreatorId);
             } catch (Exception e) {
                 log.error("#NOTIFICATIONS-D-C - Error - messageProducer.send(categoryId, messageBody); ");
                 return message("Message ERROR NOT Saved..!", "", model);

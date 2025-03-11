@@ -41,13 +41,13 @@ public class MessageService implements IMessageService {
     }
 
     @Override
-    public void notify(String categoryId, String messageBody) throws NotificationException {
+    public void notify(String categoryId, String messageBody, String messageCreatorId) throws NotificationException {
 
         try {
 
             log.info("#NOTIFICATIONS-D-C - notify(String categoryId, String messageBody)");
             notificationService.notify(
-                    save(categoryId, messageBody)
+                    save(categoryId, messageBody, messageCreatorId)
             );
 
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class MessageService implements IMessageService {
         }
     }
 
-    private Message save(String categoryId, String messageBody) throws NotificationException, MessageException {
+    private Message save(String categoryId, String messageBody, String messageCreatorId) throws NotificationException, MessageException {
 
         /*
          * Validation for existing in Database categoryId
@@ -83,7 +83,8 @@ public class MessageService implements IMessageService {
                     null,
                     categoryService.getCategoryByCategoryId(Short.valueOf(categoryId)),
                     messageBody.trim(),
-                    LocalDateTime.now());
+                    LocalDateTime.now(),
+                    messageCreatorId);
 
             log.info("#NOTIFICATIONS-D-C - Message {}",  message);
 
@@ -91,7 +92,8 @@ public class MessageService implements IMessageService {
                     create(message),
                     message.category(),
                     message.messageBody(),
-                    message.createdOn()
+                    message.createdOn(),
+                    message.messageCreatorId()
             );
 
             return message;

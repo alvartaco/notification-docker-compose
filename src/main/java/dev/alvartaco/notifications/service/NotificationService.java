@@ -31,6 +31,7 @@ public class NotificationService {
     private final UserService userService;
     private final NotificationEngineFactory notificationEngineFactory;
     private final CategoryService categoryService;
+
     public NotificationService(@Qualifier("jdbcClientNotificationRepository")
                                INotificationRepository iNotificationRepository,
                                NotificationEngineFactory notificationEngineFactory,
@@ -120,13 +121,33 @@ public class NotificationService {
     public List<NotificationDisplayDTO> getAllNotificationsDisplayDTOsLiFo() throws NotificationException {
         try {
             List<NotificationDisplayDTO> notificationDisplayDTOS = new ArrayList<>();
-            for (NotificationDTO notificationDTO : iNotificationRepository.findAllNotificationDTOsLiFo()) {
+            for (NotificationDTO notificationDTO : iNotificationRepository.getAllNotificationDTOsLiFo()) {
                 notificationDisplayDTOS.add(mapDTOToDisplayDTO(notificationDTO));
             }
             log.info("#NOTIFICATIONS-D-C - OK getAllNotificationsDisplayDTOsLiFo().");
             return notificationDisplayDTOS;
         } catch ( Exception e) {
             log.error("#NOTIFICATIONS-D-C - ERROR getAllNotificationsDisplayDTOsLiFo().");
+            throw new NotificationException("Notification not found");
+        }
+    }
+
+    /**
+     * Used for Displaying the List of Notifications of the loggeduser
+     * Log history. A list of all data records in the log, sorted from newest to oldest.
+     * @return
+     * @throws NotificationException
+     */
+    public List<NotificationDisplayDTO> getAllNotificationDTOsLiFoByMessageCreatorId() throws NotificationException {
+        try {
+            List<NotificationDisplayDTO> notificationDisplayDTOS = new ArrayList<>();
+            for (NotificationDTO notificationDTO : iNotificationRepository.getAllNotificationDTOsLiFoByMessageCreatorId()) {
+                notificationDisplayDTOS.add(mapDTOToDisplayDTO(notificationDTO));
+            }
+            log.info("#NOTIFICATIONS-D-C - OK getAllNotificationDTOsLiFoByMessageCreatorId().");
+            return notificationDisplayDTOS;
+        } catch ( Exception e) {
+            log.error("#NOTIFICATIONS-D-C - ERROR getAllNotificationDTOsLiFoByMessageCreatorId().");
             throw new NotificationException("Notification not found");
         }
     }
@@ -165,7 +186,5 @@ public class NotificationService {
                          updatedOn,
                          retryNumber
                 );
-
     }
-
 }

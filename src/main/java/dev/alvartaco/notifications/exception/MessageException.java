@@ -12,8 +12,4 @@ public class MessageException extends Exception implements Serializable {
             super(errorMsg);
         }
 
-        public MessageException(String errorMsg, Throwable throwable) {
-            super(errorMsg, throwable);
-        }
-
 }

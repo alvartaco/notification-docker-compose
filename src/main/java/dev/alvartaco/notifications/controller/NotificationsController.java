@@ -38,7 +38,7 @@ public class NotificationsController {
         boolean isKafkaUp = kafkaHealthService.isKafkaUp();
 
         log.info("#NOTIFICATIONS-D-C - public String list(Model model)");
-        List<NotificationDisplayDTO> notificationDisplayDTOS = notificationService.getAllNotificationsDisplayDTOsLiFo();
+        List<NotificationDisplayDTO> notificationDisplayDTOS = notificationService.getAllNotificationDTOsLiFoByMessageCreatorId();
         model.addAttribute("displayTable", (notificationDisplayDTOS.isEmpty() ? "none" : "block"));
         model.addAttribute("rows", notificationDisplayDTOS);
         model.addAttribute("isNotKafkaUp", !isKafkaUp);
