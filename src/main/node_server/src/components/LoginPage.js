@@ -51,7 +51,7 @@ function LoginPage() {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
-                    'X-XSRF-TOKEN': csrfToken, // Include the CSRF token as a header
+                    'X-CSRF-TOKEN': csrfToken, // Include the CSRF token as a header
                   },
                   body: JSON.stringify(credentials),
                   credentials: 'include',// This is crucial for sending cookies
