@@ -5,34 +5,43 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Notifications App. | Home Page</title>
+    <title>HTMX Notifications App. | Home Page</title>
     <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <div id="banner" class="flex gap-x-6 bg-green-600 px-6 py-2.5 sm:px-1.5">
+    <div id="banner" class="flex gap-x-6 bg-blue-600 px-6 py-2.5 sm:px-1.5">
         <p class="text-sm leading-6 text-white">
-            <a href="/">
-                <strong class="font-semibold">Notifications App.</strong>
+            <a href="/web">
+                <strong class="font-semibold">HTMX Notifications App.</strong>
             </a>
             &nbsp;|&nbsp;
             <span>Home Page</span>
         </p>
         <div class="flex flex-1 justify-end">&nbsp;</div>
+        <div class="flex flex-1 justify-end">
+            <form th:action="@{/logout}" method="post">
+                <button
+                        type="submit"
+                        class="rounded-md bg-blue-400 px-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+                    Logout
+                </button>
+            </form>
+        </div>
     </div>
 
     <div id="buttons" class="flex gap-x-6 bg-white-500 px-6 py-2.5 sm:px-1.5">
             <button th:hidden="${isNotKafkaUp}"
                 type="button"
-                class="rounded-md bg-green-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 m-4"
+                class="rounded-md bg-blue-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 m-4"
                 style="text-wrap: nowrap;"
-                onclick="location.href='/message';">
+                onclick="location.href='/web/message';">
                 Create Message
             </button>
             <button
                     type="button"
-                    class="rounded-md bg-green-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 m-4"
-                    onclick="location.href='/notifications';">
+                    class="rounded-md bg-blue-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 m-4"
+                    onclick="location.href='/web/notifications';">
                 Notifications
             </button>
         <div class="flex flex-1 justify-end">&nbsp;</div>

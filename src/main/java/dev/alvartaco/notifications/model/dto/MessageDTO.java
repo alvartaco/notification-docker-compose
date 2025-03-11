@@ -16,5 +16,6 @@ public class MessageDTO {
 
     private String categoryId;
     private String messageBody;
+    private String messageCreatorId;
 
 }

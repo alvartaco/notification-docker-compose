@@ -19,6 +19,7 @@ create table if not exists message (
    category_id smallint not null,
    message_body text not null,
    message_created_on timestamp not null,
+   message_creator_id varchar(30) not null,
    constraint fk_category
       foreign key(category_id)
         references category(category_id)

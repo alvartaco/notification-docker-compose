@@ -18,7 +18,7 @@ import java.util.List;
  * It wil display the notifications list
  */
 @Controller
-@RequestMapping("/notifications")
+@RequestMapping("/web/notifications")
 public class NotificationsController {
 
     private static final Logger log = LoggerFactory.getLogger(NotificationsController.class);
@@ -38,7 +38,7 @@ public class NotificationsController {
         boolean isKafkaUp = kafkaHealthService.isKafkaUp();
 
         log.info("#NOTIFICATIONS-D-C - public String list(Model model)");
-        List<NotificationDisplayDTO> notificationDisplayDTOS = notificationService.getAllNotificationsDisplayDTOsLiFo();
+        List<NotificationDisplayDTO> notificationDisplayDTOS = notificationService.getAllNotificationDTOsLiFoByMessageCreatorId();
         model.addAttribute("displayTable", (notificationDisplayDTOS.isEmpty() ? "none" : "block"));
         model.addAttribute("rows", notificationDisplayDTOS);
         model.addAttribute("isNotKafkaUp", !isKafkaUp);

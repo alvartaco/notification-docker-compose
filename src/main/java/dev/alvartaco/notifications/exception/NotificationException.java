@@ -12,8 +12,4 @@ public class NotificationException extends Exception implements Serializable {
             super(errorMsg);
         }
 
-        public NotificationException(String errorMsg, Throwable throwable) {
-            super(errorMsg, throwable);
-        }
-
 }

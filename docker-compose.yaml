@@ -1,22 +1,47 @@
 
+
 services:
 
+  node-server:
+    image: 'alvartaco/notification-docker-compose_node-server:0.0.3'
+    build:
+      context: ./src/main/node_server
+      dockerfile: Dockerfile.node
+    container_name: node-server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - app # If your node app need the spring app, then add this dependency
+
   app:
-    image: 'alvartaco/notification-docker-compose:0.0.2'
+    image: 'alvartaco/notification-docker-compose:0.0.3'
     build:
         context: .
     container_name: notification-docker-compose-app
     depends_on:
       - mysql
       - broker
+      - mongo-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/notifications
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_DATA_MONGODB_URI=mongodb://root:password@mongo-db:27017/userData?authSource=admin
     ports:
-      - "6868:8082"
+      - "8082:8082"
 
+  mongo-db:
+    image: mongo:7.0.3
+    container_name: mongo-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./files/mongo:/docker-entrypoint-initdb.d
   mysql:
     image: mysql:8.0.32
     container_name: mysql
@@ -65,4 +90,7 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'
       KAFKA_CLUSTERS_0_NAME: wizard_test
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker:29092
+
+volumes:
+  mongo-data:
 

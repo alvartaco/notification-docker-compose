@@ -22,7 +22,7 @@ public class HomeController {
         this.kafkaHealthService = kafkaHealthService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/web")
     public String home(Model model) {
         log.info("#NOTIFICATIONS-D-C - INSIDE /");
 
