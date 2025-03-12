@@ -149,7 +149,7 @@ The Log and some json files, related to users and categories are also uploaded i
 
 Without authentication, it was possible to test creation of Messages, that fire the Notifications the User's that are Subscribed, using the REST API; with this command:
 
-    curl -X POST localhost:nnnn/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
+    curl -X POST localhost:8082/api/messages -H 'Content-type:application/json' -d '{"categoryId": "2", "messageBody": "the boddy"}'
 
 Now it is suggested to use Postman:
 
