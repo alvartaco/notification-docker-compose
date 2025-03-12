@@ -75,7 +75,7 @@ For buildeng the application uses:
 
         -> Start Docker Compose from this Github Project's (cloned/downloaded) sorce folder: 
         
-            /notification-docker-compose$ docker-compose up -d --force-recreate  
+            /notification-docker-compose$ docker-compose up -d  
 
         -> Restart ALL Docker Container Services.
 
