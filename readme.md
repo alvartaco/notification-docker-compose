@@ -45,12 +45,11 @@ As a user interface, you must display 2 main elements.
 
 1. Submission form. A simple form to send the message that contains 2 fields:
   
-
     • Category. List of available categories.
 
     • Message. Text area, confirm that the message is not empty.
 
-2. Log history. A list of all data records in the log, sorted from newest to oldest. They are the Notifications sent.
+2. Log history. A list of all data records in the log, sorted from newest to oldest. They are the Sent Notifications.
 
 -----------------------------------------------------------------------------------------------
 
@@ -65,7 +64,7 @@ For buildeng the application uses:
      
      :: Spring Boot ::                (v3.3.4)
 
-    -> Docker Compose : SpringBoot - KafKa - KAfKa Ui - MySql - MongoDb - NodeJs - ReactJs
+    -> Docker Compose : SpringBoot App - KafKa - KAfKa Ui - MySql - MongoDb - (NodeJs / ReactJs)
 
     -> Docker Compose Image : https://hub.docker.com/r/alvartaco/notification-docker-compose
 
@@ -118,11 +117,13 @@ For buildeng the application uses:
    
     -> JDBC Client for DB Connection - MySQL at Docker Compose
 
-    -> Thymeleaf Java engine  for processing and creating HTML, XML, JavaScript, CSS and text
+    -> Dpting Data / Reository - Mongo-DB at Docker Compose
+
+    -> Thymeleaf Java engine for processing and creating HTML, XML, JavaScript, CSS and text
 
     -> HTMX a small JavaScript library that allows you to use custom attributes in HTML
 
-    -> NodeJS and ReactJS for the Login and Registration Fron that uses MongoDB.
+    -> NodeJS and ReactJS for the Login and Registration of Users in Mongo-DB.
 
     -> Dessign Pattern: Factory / Strategy for different notification channels like SMS, e-mail, Push notifications. 
     And Observer for the main objetive of Users receiving updates in their subsctipyed Message Categories.
